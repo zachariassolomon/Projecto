@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<hibernate-mapping>
+  <class lazy="false" name="TrabAASI.Interacao" table="Interacao">
+    <id column="ID" name="ID" type="integer" unsaved-value="0">
+      <generator class="native">
+			</generator>
+    </id>
+    <many-to-one access="field" cascade="lock" class="TrabAASI.Tarefa" column="TarefaID" lazy="proxy" name="tarefa" not-null="true">
+		</many-to-one>
+    <property column="Comment" lazy="false" length="255" name="comment" not-null="false" type="string"/>
+    <property column="Data_interacao" lazy="false" length="20" name="data_interacao" not-null="true" type="long"/>
+  </class>
+</hibernate-mapping>

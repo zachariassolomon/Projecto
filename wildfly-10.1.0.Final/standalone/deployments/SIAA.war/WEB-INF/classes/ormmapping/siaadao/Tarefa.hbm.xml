@@ -20,6 +20,7 @@ License Type: Evaluation
 		<property name="data_inicio" column="Data_inicio" type="long" length="20" not-null="false" lazy="false"/>
 		<property name="data_fim" column="Data_fim" type="long" length="20" not-null="false" lazy="false"/>
 		<property name="titulo" column="Titulo" type="string" length="255" not-null="true" lazy="false"/>
+		<property name="last_updated" column="Last_updated" type="long" length="20" not-null="false" lazy="false"/>
 		<set name="ORM_Interacoes" lazy="true" cascade="save-update,lock" inverse="true">
 			<key column="TarefaID" not-null="true"/>
 			<one-to-many class="siaadao.Interacao"/>

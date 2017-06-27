@@ -15,6 +15,7 @@ License Type: Evaluation
 		<property name="data_fim" column="Data_fim" type="long" length="20" not-null="false" lazy="false"/>
 		<property name="data_criacao" column="Data_criacao" type="long" length="20" not-null="false" lazy="false"/>
 		<property name="estado" column="Estado" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="last_updated" column="Last_updated" type="long" length="20" not-null="false" lazy="false"/>
 		<set name="ORM_Users" table="User_Projeto" lazy="true" cascade="save-update,lock" inverse="true">
 			<key column="ProjetoID" not-null="true"/>
 			<many-to-many column="UserID" class="siaadao.User">

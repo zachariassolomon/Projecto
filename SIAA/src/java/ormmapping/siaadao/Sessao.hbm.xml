@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="siaadao.Sessao" table="Sessao" lazy="false">
+		<id name="ID" column="ID" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="user" cascade="lock" column="UserID" class="siaadao.User" not-null="false" lazy="proxy" access="field">
+		</many-to-one>
+		<many-to-one name="tarefa" cascade="lock" column="TarefaID" class="siaadao.Tarefa" not-null="true" lazy="proxy" access="field">
+		</many-to-one>
+		<property name="data_inicio" column="Data_inicio" type="long" length="20" not-null="false" lazy="false"/>
+		<property name="data_fim" column="Data_fim" type="long" length="20" not-null="false" lazy="false"/>
+		<property name="comentario" column="Comentario" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="tempo_trabalho" column="Tempo_trabalho" type="long" length="20" not-null="false" lazy="false"/>
+	</class>
+</hibernate-mapping>

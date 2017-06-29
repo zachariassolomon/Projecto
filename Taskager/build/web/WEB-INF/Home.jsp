@@ -135,7 +135,11 @@
                         <h4 class="modal-title">Criar novo projeto</h4>
                     </div>
                     <div class="modal-body">
+<<<<<<< HEAD
                         <form id="new_project" action="Project" method="post">
+=======
+                        <form id="new_project" action="Home"> <!--onsubmit="alert(this.firstChild.value)"-->
+>>>>>>> b41da3133234a23198fd437a63d8e315c149db2b
                             <div class="form-group">
                                 <label for="project_name">Título:</label>
                                 <input type="text" id="project_name" class="form-control" name="titulo" value="" required="required" placeholder="Título do projeto">
@@ -144,7 +148,7 @@
                                 <label for="project_description">Descrição:</label>
                                 <textarea class="form-control" rows="4" cols="76" name="descricao" form="new_project" required="required" placeholder="Descrição do projeto"></textarea>
                             </div>
-                            <button class="btn btn-default btn-success">Criar projeto</button>
+                            <button type="submit" class="btn btn-default btn-success">Criar projeto</button>
                         </form>
                     </div>
                     <!--<div class="modal-footer">

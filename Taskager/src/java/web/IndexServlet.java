@@ -48,7 +48,25 @@ public class IndexServlet extends HttpServlet {
         request.setAttribute("recentProjects", recentProjects);
         request.setAttribute("projects", projects);
         
-        request.getRequestDispatcher("WEB-INF/Index.jsp").forward(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        if (username!=null && username.equals("joao")){ // Username existe
+            request.setAttribute("user_ok", "yes");
+            if (password!= null && password.equals("123")){ // Password correta
+                request.setAttribute("login_ok","yes");
+                request.getRequestDispatcher("WEB-INF/Home.jsp").forward(request, response);
+            }
+            else {
+                request.setAttribute("login_ok","no");
+                request.getRequestDispatcher("WEB-INF/Index.jsp").forward(request, response);
+            }// Password incorreta
+        }
+        else { // Username não existe
+            request.setAttribute("user_ok", "no");
+            //request.setAttribute("login_ok","no");
+            request.getRequestDispatcher("WEB-INF/Index.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

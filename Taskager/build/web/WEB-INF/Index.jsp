@@ -36,9 +36,21 @@ and open the template in the editor.
                         <span class="glyphicon glyphicon-tasks"></span> &nbsp;Taskager
                     </a>
                 </div>
-                <form class="navbar-form navbar-right" action="Home">
+                <form class="navbar-form navbar-right" action="Index">
                     <div class="form-group">
-                        <input type="text" id="login_username" class="form-control" name="username" value="" required="required" placeholder="Nome de utilizador">
+                        <%
+                            String username = request.getParameter("username"); 
+                            String login_ok = (String) request.getAttribute("login_ok");
+                            
+                            if (username!=null && request.getAttribute("user_ok").equals("no"))
+                                out.println("<span style=\"color:red\">Utilizador <u><b>"+username+"</b></u> não existe!&nbsp</span>"
+                                + "<input type=\"text\" id=\"login_username\" class=\"form-control\" name=\"username\" value=\"\" required=\"required\" placeholder=\"Nome de utilizador\">");
+                            else if (login_ok!=null && login_ok.equals("no"))
+                                out.println("<span style=\"color:red\">Palavra-passe incorreta!&nbsp</span>"
+                                        + "<input type=\"text\" id=\"login_username\" class=\"form-control\" name=\"username\" value=\""+username+"\" required=\"required\" placeholder=\"Nome de utilizador\">" );
+                            else out.println("<input type=\"text\" id=\"login_username\" class=\"form-control\" name=\"username\" value=\"\" required=\"required\" placeholder=\"Nome de utilizador\">");
+                        %>
+                        <!--<input type="text" id="login_username" class="form-control" name="username" value="" required="required" placeholder="Nome de utilizador">-->
                     </div>
                     <div class="form-group">
                         <input type="password" id="login_password" class="form-control" name="password" value="" required="required" placeholder="Palava-passe">
@@ -66,7 +78,7 @@ and open the template in the editor.
                     </header>
                     <section class="panel-body">
                         <div class="alert alert-info">Não possui uma conta? Introduza os seus dados e registe-se!</div>
-                        <form id="form" action="Home" method="post" class="form-horizontal">
+                        <form id="form" action="Index" method="post" class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-sm-12">                                    
                                     <label for="username">Nome de utilizador:</label>

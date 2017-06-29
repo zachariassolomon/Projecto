@@ -5,7 +5,9 @@
         <group>
             <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/src/java/web/HomeServlet.java</file>
             <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/src/java/web/ProjectServlet.java</file>
+            <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/src/java/web/IndexServlet.java</file>
             <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/web/WEB-INF/Project.jsp</file>
+            <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/web/WEB-INF/Index.jsp</file>
             <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/web/WEB-INF/Home.jsp</file>
         </group>
     </open-files>

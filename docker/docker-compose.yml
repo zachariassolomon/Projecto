@@ -1,0 +1,53 @@
+version: '2'
+
+services:
+  mysql:
+    build: mysql
+    container_name: "siaa_db"
+    ports:
+       - "3306:3306"
+  
+  graphite:
+    build: graphite
+    container_name: "siaa_graphite"
+    restart: always
+    ports:
+        - "8000:8000"
+        - "2003:2003"
+        - "2004:2004"
+    
+    volumes:
+        - graphite:/opt/graphite/storage/whisper
+  
+  statsd:
+    build: statsd
+    container_name: "siaa_statsd"
+    restart: always
+    ports:
+        - "8125:8125/udp"
+        - "8126:8126"
+    links:
+        - graphite
+
+    volumes:
+        - statsd:/etc/statsd
+
+  grafana:
+    image: grafana/grafana
+    container_name: "siaa_grafana"
+    restart: always
+    ports:
+        - "3000:3000"
+    links:
+        - graphite
+    volumes:
+        - grafana:/var/lib/grafana
+
+    environment:
+        - GF_SECURITY_ADMIN_PASSWORD=ola123 
+
+
+volumes:
+        graphite:
+        statsd:
+        grafana:

@@ -135,14 +135,14 @@
                         <h4 class="modal-title">Criar novo projeto</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="new_project" action="Project" method="post">
+                        <form id="new_project" onsubmit="alert(this.firstChild.value)">
                             <div class="form-group">
                                 <label for="project_name">Título:</label>
-                                <input type="text" id="project_name" class="form-control" name="titulo" value="" required="required" placeholder="Título do projeto">
+                                <input type="text" id="project_name" class="form-control" name="project_name" value="" required="required" placeholder="Título do projeto">
                             </div>
                             <div class="form-group">
                                 <label for="project_description">Descrição:</label>
-                                <textarea class="form-control" rows="4" cols="76" name="descricao" form="new_project" required="required" placeholder="Descrição do projeto"></textarea>
+                                <textarea class="form-control" rows="4" cols="76" name="project_description" form="new_project" required="required" placeholder="Descrição do projeto"></textarea>
                             </div>
                             <button class="btn btn-default btn-success">Criar projeto</button>
                         </form>

@@ -36,7 +36,7 @@ and open the template in the editor.
                         <span class="glyphicon glyphicon-tasks"></span> &nbsp;Taskager
                     </a>
                 </div>
-                <form class="navbar-form navbar-right" action="Home">
+                <form class="navbar-form navbar-right" action="Login" method="post">
                     <div class="form-group">
                         <input type="text" id="login_username" class="form-control" name="username" value="" required="required" placeholder="Nome de utilizador">
                     </div>
@@ -66,7 +66,7 @@ and open the template in the editor.
                     </header>
                     <section class="panel-body">
                         <div class="alert alert-info">Não possui uma conta? Introduza os seus dados e registe-se!</div>
-                        <form id="form" action="Home" method="post" class="form-horizontal">
+                        <form id="form" action="Register" method="post"  class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-sm-12">                                    
                                     <label for="username">Nome de utilizador:</label>

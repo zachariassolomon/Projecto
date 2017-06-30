@@ -32,6 +32,15 @@
                 this.setTimeout(func2, 100, task, times);
             }
         </script>
+        
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip(); 
+                $('[data-toggle="popover"]').popover(); 
+
+            });
+        </script>
+        
         <style>
 
             div.scrollmenu {
@@ -53,7 +62,8 @@
                 text-decoration: none;
                 margin-top:0px;
                 height:auto;
-                width:33.05%;
+                width:24.68%;
+                /*width:33.05%;*/
                 
             }
 
@@ -103,7 +113,10 @@
                         <span class="glyphicon glyphicon-tasks"></span> &nbsp;Taskager
                     </a>
                 </div>
-                <ul class="nav navbar-nav navbar-right">                    
+                <ul class="nav navbar-nav navbar-left">                    
+                    <li><li><a href="Home">Projetos</a></li></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">       
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:white;">
                             <span class="glyphicon glyphicon-user"></span>&nbsp; João
@@ -119,8 +132,23 @@
         </nav>
         
         <div style="margin-left:1%;width:98%;">
-            <h2 style="text-align:left"><b><%=request.getParameter("project_name")%></b>
-            <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getAttribute("project_description")%></span></h2>
+            <div class="row">
+            <div class="col-sm-10">
+                <h2 style="text-align:left">                
+                    <span class="glyphicon glyphicon-folder-open" ></span>&nbsp;
+                    <b><%=request.getParameter("project_name")%></b>
+                    <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getAttribute("project_description")%></span>
+                </h2>
+            </div>
+            <div class="col-sm-2">
+                <!--<button class="btn btn-success" data-toggle="tooltip" data-placement="left" title="Todos os projetos" onclick="alert('projects')">Projetos</button>-->
+                <button class="btn btn-warning pull-right" style="margin-right:0%;"
+                        data-toggle="modal" data-target="#shareModal" onclick="this.blur();">
+                    Partilhar&nbsp;&nbsp;<span class="glyphicon glyphicon-share"></span></button>
+            </div>
+            </div>
+            
+            <br>
         </div>
         <br>
 
@@ -145,6 +173,8 @@
         
         <%
             String[] tasks = (String[]) request.getAttribute("tasks");
+            String[] subTasks = (String[]) request.getAttribute("subTasks");
+            String[] members = (String[]) request.getAttribute("members");
         %>
 
         
@@ -152,8 +182,15 @@
             <nav id="myScrollspy">
                 <ul class="nav nav-pills nav-stacked">
                     
-                <li class="active"><a style="font-size:20px;">Tarefas<span class="glyphicon glyphicon-plus pull-right" style="font-size:20px;"></span></a></li>
-                    <c:forEach var ="task" items="${tasks}">
+                <li class="active" data-toggle="modal" data-target="#newTaskModal" >
+                    <a ref="#" style="font-size:20px;">Tarefas
+                        <span title="Adicionar tarefa" class="glyphicon glyphicon-plus pull-right" 
+                              data-toggle="tooltip" data-placement="bottom" title="Adicionar tarefa" style="font-size:25px;"></span>
+                    </a>
+                </li>
+                    
+                <c:forEach var ="task" items="${tasks}">
+                    <!--<li><a onclick="func('${task}',1)" href="#${task}"><b>${task}</b></a></li>-->
                     <li><a onclick="func('${task}',1)" style="font-size:20px;" href="#${task}">${task}</a></li>
                     </c:forEach>
                 </ul>
@@ -174,12 +211,16 @@
    
                 <c:forEach var ="task" items="${tasks}">
                     <div class="panel panel-primary tasklist" id="${task}">
-                        <div class="panel-heading">${task}<span class="glyphicon glyphicon-plus-sign pull-right" style="font-size:20px;"></span></div>
+                        <div class="panel-heading" data-toggle="modal" data-target="#newSubTaskModal">
+                            <b>${task}</b>
+                            <span class="glyphicon glyphicon-plus-sign pull-right" style="font-size:20px;"
+                                   ></span>
+                        </div>
                         <div class="panel-body">
-                            <c:forEach var ="task2" items="${tasks}">
+                            <c:forEach var ="subTask" items="${subTasks}">
                                 <div class="well" style="width:98%;margin-left:1%; margin-bottom:4px;padding:5px;"
-                                     onclick="$('#modal${task2.replaceAll(" ","")}').modal('show')">
-                                    <p>${task2}</p>
+                                     onclick="$('#modal${subTask.replaceAll(" ","")}').modal('show')">
+                                    <p>${subTask}</p>
                                 </div>
                             </c:forEach>
                         </div>
@@ -211,13 +252,142 @@
                 </div>
             </div>-->
         
-        <c:forEach var ="task" items="${tasks}">
-            <div class="modal fade" id="modal${task.replaceAll(" ","")}" role="dialog">
+        
+        
+        <!-- 
+            MODAL: Criar nova tarefa
+        -->
+        
+        <div class="modal fade" id="newTaskModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Criar tarefa</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="new_task" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                            <div class="form-group">
+                                
+                                <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
+                                
+                                <label for="project_name">Título:</label>
+                                <input type="text" id="project_name" class="form-control" name="task_name" form="new_task" value="" required="required" placeholder="Título da tarefa">
+                            </div>
+                            <div class="form-group">
+                                <label for="project_description">Descrição:</label>
+                                <textarea class="form-control" rows="4" cols="76" name="task_description" form="new_task" required="required" placeholder="Descrição da tarefa"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-default btn-success">Adicionar</button>
+                        </form>
+                        
+                    </div>
+                    <!--<div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>-->
+                </div>
+
+            </div>
+        </div>
+        
+        
+        
+        <!-- 
+            MODAL: Criar nova SUB-tarefa
+        -->
+        
+        <div class="modal fade" id="newSubTaskModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Criar sub-tarefa</h4>
+                        <h5><%=request.getParameter("project_name")%></h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="new_subtask" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                            <div class="form-group">
+                                <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
+                                
+                                <label for="project_name">Título:</label>
+                                <input type="text" id="project_name" class="form-control" form="new_subtask" name="subtask_name" value="" required="required" placeholder="Título da sub-tarefa">
+                            </div>
+                            <div class="form-group">
+                                <label for="project_description">Descrição:</label>
+                                <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask" required="required" placeholder="Descrição da sub-tarefa"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-default btn-success">Adicionar</button>
+                        </form>
+                        
+                    </div>
+                    <!--<div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>-->
+                </div>
+
+            </div>
+        </div>
+                                
+                                
+        
+        <!-- 
+            MODAL: Partilhar projeto
+        -->
+        
+        <div class="modal fade" id="shareModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Partilhar ${request.getParameter("project_name")}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="new_project" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                            <div class="form-group">
+                                <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
+                                <label for="person_name">Convidar utilizador(es)</label>
+                                <input type="text" id="project_name" class="form-control" name="person_name" value="" required="required" placeholder="Exemplo: João, Pedro, Ana">
+                            </div>
+                            <button type="submit" class="btn btn-default btn-warning">Partilhar</button>
+                        </form>
+                        <hr>
+                        <label for="users">Membros do projeto: </label>
+                        <p style="font-size:18px;">
+                            <c:forEach var ="member" items="${members}">
+                                <!--<span data-toggle="tooltip" data-placement="bottom" title="${member}" class="label label-primary">${member}</span>-->
+                                <span class="label label-primary">${member}</span>
+                            </c:forEach>
+                        </p>
+                        
+                    </div>
+                    <!--<div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>-->
+                </div>
+
+            </div>
+        </div>
+        
+        
+        
+        
+        <!-- 
+            MODALS: propriedades das sub-tarefas 
+        -->
+        
+        <c:forEach var ="subTask" items="${subTasks}">
+            <div class="modal fade" id="modal${subTask.replaceAll(" ","")}" role="dialog">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header" style="background-color:#286090">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h3 class="modal-title" style="color:white">${task}</h3>
+                            <h3 class="modal-title" style="color:white">${subTask}</h3>
                         </div>
                         <div class="modal-body" style="background-color:lightgray">
                             <p><label>Data proposta:</label> 05/07/2017</p>
@@ -234,7 +404,7 @@
 
                                     <hr>                        
 
-                                    <h4>Comentários</h4>
+                                    <h4>Comentários&nbsp;&nbsp;<span class="glyphicon glyphicon-comment"></span></h4>
                                     <div style="margin-top:0px; margin-bottom:0px;" >
                                         <label>João</label><small> (em 28/06/2017 às 16:45)</small>
                                         <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
@@ -261,7 +431,7 @@
 
                                     <hr>
 
-                                    <h4>Atividade</h4>
+                                    <h4>Atividade&nbsp;&nbsp;<span class="glyphicon glyphicon-calendar"></span></h4>
                                     <div style="margin-top:10px; margin-bottom:0px;"  >
                                         <label>Pedro</label><small> (em 28/06/2017 às 16:45)</small>
                                         <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
@@ -303,6 +473,8 @@
                 </div>
             </div>
         </c:forEach>
+        
+        
         <!--
         <div class="modal fade" id="myModal1" role="dialog">
             <div class="modal-dialog modal-lg">

@@ -60,15 +60,16 @@
                 <!--<hr style="border:1px solid black; background-color:black;">-->
                 <c:forEach var="project" items="${recentProjects}">
                     <div class="col-sm-4">
-                        <div class="panel panel-info" onmouseenter="this.style.border='2px solid black'"
+                        <div class="panel panel-info" >
+                             <!--onmouseenter="this.style.border='2px solid black'"
                              onmouseleave="this.style.border='0px solid black'"
                              onclick="window.location.href = window.location.href.slice(0,window.location.href.length-4) 
-                                         + 'Project/project_name='+${recentProjects[0]}">
+                                         + 'Project/project_name='+${recentProjects[0]}">-->
                             <header class="panel-heading">
                                 <a href="Project?project_name=${project[0]}"><h2 style="color:black" class="panel-title">${project[0]}</h2></a>
                             </header>
                             <section class="panel-body">
-                                <p style="text-align:right">${project[1]}</p>
+                                <p style="text-align:right;overflow: hidden;text-overflow: ellipsis;height:60px;">${project[1]}</p>
                             </section>
                         </div>
                     </div>
@@ -92,7 +93,7 @@
                 
                 <!--<hr style="border:1px solid black; background-color:black;">-->
                 <div class="col-sm-3">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-primary"> <!--style="height:134.2px;">-->
                         <header class="panel-heading">
                             <a style="color:white" data-toggle="modal" data-target="#myModal">
                                 <h2 class="panel-title">
@@ -100,7 +101,7 @@
                                     Novo projeto</h2>
                             </a>
                         </header>
-                        <section class="panel-body">
+                        <section class="panel-body"> <!--style="height:95.6px;">-->
                             <a style="font-size:330%; margin-top:30px;" data-toggle="modal" data-target="#myModal">
                                 <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
                                 <span style="margin-left:40%;" class="glyphicon glyphicon-plus"></span>
@@ -115,8 +116,8 @@
                             <header class="panel-heading">
                                 <a href="Project?project_name=${project[0]}"><h2 style="color:white" class="panel-title">${project[0]}</h2></a>
                             </header>
-                            <section class="panel-body">
-                                <p style="text-align:left">${project[1]}</p>
+                            <section class="panel-body"  style="height:95.6px;">
+                                <p style="text-align:left;overflow: hidden;text-overflow: ellipsis;height:60px;">${project[1]}</p>
                             </section>
                         </div>
                     </div>                    
@@ -135,7 +136,7 @@
                         <h4 class="modal-title">Criar novo projeto</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="new_project" onsubmit="alert(this.firstChild.value)">
+                        <form id="new_project" action="Home"> <!--onsubmit="alert(this.firstChild.value)"-->
                             <div class="form-group">
                                 <label for="project_name">Título:</label>
                                 <input type="text" id="project_name" class="form-control" name="project_name" value="" required="required" placeholder="Título do projeto">
@@ -144,7 +145,7 @@
                                 <label for="project_description">Descrição:</label>
                                 <textarea class="form-control" rows="4" cols="76" name="project_description" form="new_project" required="required" placeholder="Descrição do projeto"></textarea>
                             </div>
-                            <button class="btn btn-default btn-success">Criar projeto</button>
+                            <button type="submit" class="btn btn-default btn-success">Criar projeto</button>
                         </form>
                     </div>
                     <!--<div class="modal-footer">

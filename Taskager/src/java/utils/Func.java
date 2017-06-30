@@ -35,7 +35,7 @@ public class Func {
             } else {
                 logger.log(Level.INFO, "A criar uma nova sessão persistente");
                 session = ProjectoPersistentManager.instance().getSession();
-                request.getSession().setAttribute("dbsession", session);
+                //request.getSession().setAttribute("dbsession", session);
             }
         } catch (PersistentException ex) {
             logger.log(Level.SEVERE, "Ocorreu uma exceção ao criar sessão persistente", ex);

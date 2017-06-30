@@ -58,9 +58,7 @@ public class Login extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         Object user_id = request.getSession().getAttribute("user_id");
-        if((user_id!=null) && ((user_id.equals(request.getParameter("username"))) ||
-                               (user_id.equals(request.getParameter("email"))))) {
-            
+        if((user_id!=null)) {
             logger.log(Level.INFO, "Utilizador já está logado com user_id: " + user_id);
             doLogin(request, response);
 
@@ -109,7 +107,7 @@ public class Login extends HttpServlet {
             return; /// TODO: Fix this
         }
         
-        String[][] projects = null;
+        String[][] projects = new String[projs.length][2];  // TODO: fix this
         
         for(int i = 0; i<projs.length; i++ ) {
             if(projs[i].getEstado() != Constants.PROJETO_CLOSED) {

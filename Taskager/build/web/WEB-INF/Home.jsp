@@ -113,7 +113,7 @@
                     <div class="col-sm-3">
                         <div class="panel panel-primary">
                             <header class="panel-heading">
-                                <a href="Project?project_name=${project[0]}"><h2 style="color:white" class="panel-title">${project[0]}</h2></a>
+                                <a href="Tarefa?project_name=${project[0]}"><h2 style="color:white" class="panel-title">${project[0]}</h2></a>
                             </header>
                             <section class="panel-body">
                                 <p style="text-align:left">${project[1]}</p>
@@ -135,11 +135,8 @@
                         <h4 class="modal-title">Criar novo projeto</h4>
                     </div>
                     <div class="modal-body">
-<<<<<<< HEAD
                         <form id="new_project" action="Project" method="post">
-=======
                         <form id="new_project" action="Home"> <!--onsubmit="alert(this.firstChild.value)"-->
->>>>>>> b41da3133234a23198fd437a63d8e315c149db2b
                             <div class="form-group">
                                 <label for="project_name">Título:</label>
                                 <input type="text" id="project_name" class="form-control" name="titulo" value="" required="required" placeholder="Título do projeto">

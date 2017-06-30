@@ -8,6 +8,7 @@ package beans;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import org.hibernate.Session;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
 import siaadao.*;
@@ -62,11 +63,10 @@ public class UserBean implements UserBeanLocal {
         
         if(user==null) 
             return false;
-
         user.projetos.add(Projeto);
         try {
-            session.update(user);
-            //UserDAO.save(user);
+            //siaadao.ProjectoPersistentManager.instance().getSession().getSessionFactory().getCurrentSession().merge(user);
+            UserDAO.save(user);
         } catch (PersistentException ex) {
             Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
         }

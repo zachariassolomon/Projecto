@@ -36,11 +36,8 @@ and open the template in the editor.
                         <span class="glyphicon glyphicon-tasks"></span> &nbsp;Taskager
                     </a>
                 </div>
-<<<<<<< HEAD
                 <form class="navbar-form navbar-right" action="Login" method="post">
-=======
                 <form class="navbar-form navbar-right" action="Index">
->>>>>>> b41da3133234a23198fd437a63d8e315c149db2b
                     <div class="form-group">
                         <%
                             String username = request.getParameter("username"); 
@@ -82,11 +79,8 @@ and open the template in the editor.
                     </header>
                     <section class="panel-body">
                         <div class="alert alert-info">Não possui uma conta? Introduza os seus dados e registe-se!</div>
-<<<<<<< HEAD
                         <form id="form" action="Register" method="post"  class="form-horizontal">
-=======
                         <form id="form" action="Index" method="post" class="form-horizontal">
->>>>>>> b41da3133234a23198fd437a63d8e315c149db2b
                             <div class="form-group">
                                 <div class="col-sm-12">                                    
                                     <label for="username">Nome de utilizador:</label>

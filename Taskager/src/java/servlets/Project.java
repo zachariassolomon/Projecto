@@ -21,7 +21,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.orm.PersistentException;
 import org.orm.PersistentSession;
+import org.orm.PersistentTransaction;
 import utils.Constants;
 import utils.Func;
 
@@ -60,17 +62,30 @@ public class Project extends HttpServlet {
         statsd.incrementCounter(METHOD);
         Long starttime = new Date().getTime();
         
-        if(request.getParameter("titulo").equals("") || request.getParameter("titulo") == null) {
-            Func.printToScreen("Nome de projeto inválido", response);
-            logger.log(Level.INFO, "Pedido de criação de projeto falhou");
-            return;
-        }
+//        if(request.getParameter("titulo").equals("") || request.getParameter("titulo") == null) {
+//            Func.printToScreen("Nome de projeto inválido", response);
+//            logger.log(Level.INFO, "Pedido de criação de projeto falhou");
+//            return;
+//        }
         
         String method = request.getMethod();
         if (method.equals("POST")) {
             String titulo = request.getParameter("titulo");
             String descricao = request.getParameter("descricao") == null ? "" : request.getParameter("descricao");
+            
+            
+//            try {
+//                tx = siaadao.ProjectoPersistentManager.instance().getSession().beginTransaction();
+//            } catch (PersistentException ex) {
+//                Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, ex);
+//            }
             PersistentSession session = Func.getOrCreatePersistentSession(request);
+            PersistentTransaction tx=null;
+            try {
+                tx = session.beginTransaction();
+            } catch (PersistentException ex) {
+                Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Projeto proj = projetoBean.create(session, titulo, descricao);
             if (proj==null) {
                 Func.printToScreen("Ocorreu um erro ao criar o projeto, verifique se já não existe um projeto com o mesmo nome", response);
@@ -80,6 +95,11 @@ public class Project extends HttpServlet {
                 Object username = request.getSession().getAttribute("user_id");
                 if(username != null) {
                     Boolean success = userBean.addProjeto(proj, session, (String) username);
+                    try {
+                        tx.commit();
+                    } catch (PersistentException ex) {
+                        Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     if(!success) {
                         logger.log(Level.SEVERE, "Pedido de associação de user ao projeto falhou");
                     }

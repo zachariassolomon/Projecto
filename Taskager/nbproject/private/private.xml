@@ -3,19 +3,24 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/home/nelson/projects/Projecto/SIAA/src/java/servlets/IndexServlet.java</file>
-            <file>file:/home/nelson/projects/Projecto/SIAA/src/java/servlets/Project.java</file>
-            <file>file:/home/nelson/projects/Projecto/SIAA/web/WEB-INF/web.xml</file>
-            <file>file:/home/nelson/projects/Projecto/SIAA/src/java/servlets/Login.java</file>
-=======
-            <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/src/java/web/HomeServlet.java</file>
-            <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/src/java/web/ProjectServlet.java</file>
-            <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/src/java/web/IndexServlet.java</file>
-            <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/web/WEB-INF/Project.jsp</file>
-            <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/web/WEB-INF/Index.jsp</file>
-            <file>file:/C:/Users/joao/Desktop/Arquiteturas%20Aplicacionais/Projetos/Taskager/web/WEB-INF/Home.jsp</file>
->>>>>>> b41da3133234a23198fd437a63d8e315c149db2b
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/servlets/Register.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/ormmapping/Projecto.cfg.xml</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/utils/Constants.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/servlets/Login.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/web/WEB-INF/jboss-web.xml</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/web/index.html</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/beans/ProjetoBeanLocal.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/beans/UserBean.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/beans/UserBeanLocal.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/web/WEB-INF/Project.jsp</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/utils/Func.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/servlets/Project.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/web/WEB-INF/web.xml</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/beans/ProjetoBean.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/ormmapping/database.cfg.xml</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/src/java/servlets/Index.java</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/web/WEB-INF/Home.jsp</file>
+            <file>file:/home/nelson/projects/Projecto/Taskager/web/WEB-INF/Index.jsp</file>
         </group>
     </open-files>
 </project-private>

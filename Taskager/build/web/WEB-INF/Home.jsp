@@ -41,12 +41,11 @@
                 <ul class="nav navbar-nav navbar-right">                    
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:white;">
-                            <span class="glyphicon glyphicon-user"></span>&nbsp; ${request.getParameter("username")}
+                            <span class="glyphicon glyphicon-user"></span>&nbsp; <%= request.getAttribute("username")%>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#"><span class="glyphicon glyphicon-cog"></span> &nbsp;O meu perfil</a></li>
-                            <li><a href="Index"><span class="glyphicon glyphicon-log-out"></span> &nbsp;Sair</a></li>
+                            <li><a href="Index?logout=true"><span class="glyphicon glyphicon-log-out"></span> &nbsp;Sair</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -66,7 +65,7 @@
                              onclick="window.location.href = window.location.href.slice(0,window.location.href.length-4) 
                                          + 'Project/project_name='+${recentProjects[0]}">-->
                             <header class="panel-heading">
-                                <a href="Project?project_name=${project.getNome()}"><h2 style="color:black" class="panel-title">${project.getNome()}</h2></a>
+                                <a href="Tarefa?project_name=${project.getNome()}&project_description=${project.getDescricao()}"><h2 style="color:black" class="panel-title">${project.getNome()}</h2></a>
                             </header>
                             <section class="panel-body">
                                 <p style="text-align:right;overflow: hidden;text-overflow: ellipsis;height:60px;">${project.getDescricao()}</p>
@@ -114,7 +113,7 @@
                     <div class="col-sm-3">
                         <div class="panel panel-primary">
                             <header class="panel-heading">
-                                <a href="Project?project_name=${project.getNome()}"><h2 style="color:white" class="panel-title">${project.getNome()}</h2></a>
+                                <a href="Tarefa?project_name=${project.getNome()}&project_description=${project.getDescricao()}"><h2 style="color:white" class="panel-title">${project.getNome()}</h2></a>
                             </header>
                             <section class="panel-body"  style="height:95.6px;">
                                 <p style="text-align:left;overflow: hidden;text-overflow: ellipsis;height:60px;">${project.getDescricao()}</p>

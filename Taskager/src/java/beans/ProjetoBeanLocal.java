@@ -5,8 +5,12 @@
  */
 package beans;
 
+
+import java.util.ArrayList;
 import javax.ejb.Local;
+import org.orm.PersistentSession;
 import siaadao.Projeto;
+import siaadao.Tarefa;
 
 /**
  *
@@ -18,6 +22,10 @@ public interface ProjetoBeanLocal {
     Projeto create(org.orm.PersistentSession session, String titulo, String descricao);
 
     Projeto getProjeto(org.orm.PersistentSession session, String titulo);
+
+    ArrayList<siaadao.Tarefa> getTarefas(PersistentSession session, String project_name);
+
+    ArrayList<siaadao.User> getMembers(PersistentSession session, String project_name);
 
     
 }

@@ -118,10 +118,12 @@ public class Login extends HttpServlet {
 
         Collections.sort(recents, (Projeto o1, Projeto o2) -> ((Long)o1.getLast_updated()).compareTo((Long)o2.getLast_updated()));
     
-         
-         request.setAttribute("recentProjects", recents.subList(0, 3));
+        int size = (recents.size()>3) ? 3 :  recents.size();
+        
+         request.setAttribute("recentProjects", recents.subList(0, size));
          request.setAttribute("projects", projects);
-
+         request.setAttribute("username", username);
+                 
          request.getRequestDispatcher("WEB-INF/Home.jsp").forward(request, response);
         
     }

@@ -62,23 +62,11 @@ public class Project extends HttpServlet {
         statsd.incrementCounter(METHOD);
         Long starttime = new Date().getTime();
         
-//        if(request.getParameter("titulo").equals("") || request.getParameter("titulo") == null) {
-//            Func.printToScreen("Nome de projeto inválido", response);
-//            logger.log(Level.INFO, "Pedido de criação de projeto falhou");
-//            return;
-//        }
-        
         String method = request.getMethod();
         if (method.equals("POST")) {
             String titulo = request.getParameter("project_name");
             String descricao = request.getParameter("project_description") == null ? "" : request.getParameter("project_description");
             
-            
-//            try {
-//                tx = siaadao.ProjectoPersistentManager.instance().getSession().beginTransaction();
-//            } catch (PersistentException ex) {
-//                Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, ex);
-//            }
             PersistentSession session = Func.getOrCreatePersistentSession(request);
             PersistentTransaction tx=null;
             try {

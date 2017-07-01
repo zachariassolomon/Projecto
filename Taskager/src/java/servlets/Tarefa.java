@@ -5,13 +5,19 @@
  */
 package servlets;
 
+import beans.ProjetoBeanLocal;
+import beans.UserBeanLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import siaadao.Projeto;
+import siaadao.User;
+import utils.Func;
 
 /**
  *
@@ -19,6 +25,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Tarefa", urlPatterns = {"/Tarefa"})
 public class Tarefa extends HttpServlet {
+
+    @EJB
+    private UserBeanLocal userBean;
+
+    @EJB
+    private ProjetoBeanLocal projetoBean;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,6 +44,23 @@ public class Tarefa extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        String username = (String) request.getSession().getAttribute("user_id");
+        String project_name = (String) request.getParameter("project_name");
+
+        String member = request.getParameter("person_name");
+        if(member != null) {
+            Projeto proj = projetoBean.getProjeto(Func.getOrCreatePersistentSession(request), project_name);
+            userBean.addProjeto(proj, Func.getOrCreatePersistentSession(request), member);
+        }
+        
+        ArrayList<siaadao.Tarefa> tarefas = projetoBean.getTarefas(Func.getOrCreatePersistentSession(request), project_name);
+        ArrayList<User> members = projetoBean.getMembers(Func.getOrCreatePersistentSession(request), project_name);
+        
+       
+        request.setAttribute("tasks", tarefas);
+        request.setAttribute("members", members);
+        request.setAttribute("username", username);       
         request.getRequestDispatcher("WEB-INF/Project.jsp").forward(request, response);
 
     }

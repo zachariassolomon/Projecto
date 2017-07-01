@@ -5,6 +5,9 @@
  */
 package beans;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +16,8 @@ import org.orm.PersistentException;
 import org.orm.PersistentSession;
 import siaadao.Projeto;
 import siaadao.ProjetoDAO;
+import siaadao.Tarefa;
+import siaadao.User;
 import siaadao.UserDAO;
 import utils.Constants;
 
@@ -58,5 +63,33 @@ public class ProjetoBean implements ProjetoBeanLocal {
         return proj;
     }
 
+    @Override
+    public ArrayList<siaadao.Tarefa> getTarefas(PersistentSession session, String project_name) {
+        Projeto proj = getProjeto(session, project_name);
+        
+        if(proj==null) 
+            return null;
+
+        ArrayList<siaadao.Tarefa> tarefas = new ArrayList(Arrays.asList(proj.tarefas.toArray()));
+        Collections.sort(tarefas, (siaadao.Tarefa o1, siaadao.Tarefa o2) -> (o1.getTitulo()).compareTo(o2.getTitulo()));
+        
+        return tarefas;
+        
+    }
+
+    @Override
+    public ArrayList<siaadao.User> getMembers(PersistentSession session, String project_name) {
+        Projeto proj = getProjeto(session, project_name);
+        
+        if(proj==null) 
+            return null;
+
+        ArrayList<siaadao.User> members = new ArrayList(Arrays.asList(proj.users.toArray()));
+        Collections.sort(members, (siaadao.User o1, siaadao.User o2) -> (o1.getUsername().compareTo(o2.getUsername())));
+        
+        return members;
+    }
+
+    
 
 }

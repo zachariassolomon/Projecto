@@ -74,7 +74,6 @@ and open the template in the editor.
                     <section class="panel-body">
                         <div class="alert alert-info">Não possui uma conta? Introduza os seus dados e registe-se!</div>
                         <form id="form" action="Register" method="post"  class="form-horizontal">
-                        <form id="form" action="Index" method="post" class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-sm-12">                                    
                                     <label for="username">Nome de utilizador:</label>

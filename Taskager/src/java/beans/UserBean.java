@@ -72,7 +72,6 @@ public class UserBean implements UserBeanLocal {
             return false;
         user.projetos.add(Projeto);
         try {
-            //siaadao.ProjectoPersistentManager.instance().getSession().getSessionFactory().getCurrentSession().merge(user);
             UserDAO.save(user);
         } catch (PersistentException ex) {
             Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);

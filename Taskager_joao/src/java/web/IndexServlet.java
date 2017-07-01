@@ -48,6 +48,30 @@ public class IndexServlet extends HttpServlet {
         request.setAttribute("recentProjects", recentProjects);
         request.setAttribute("projects", projects);
         
+        
+        
+        String register_username = request.getParameter("register_username");
+        String register_email = request.getParameter("register_email");
+        
+        
+        if (register_username!=null){               // Ação de "registo"
+            System.out.println("");
+            if (register_username.equals("joao"))   // ERRO: Username já existe (ko)
+                request.setAttribute("register_username_ok", "no");
+            else                                    // Username ainda não existe (ok)
+                request.setAttribute("register_username_ok", "yes");
+        }
+        
+        if (register_email!=null){               // Ação de "registo"
+            if (register_email.equals("joao"))   // ERRO: Email já existe (ko)
+                request.setAttribute("register_email_ok", false);
+            else                                    // Email ainda não existe (ok)
+                request.setAttribute("register_email_ok", true);
+        }
+        
+        
+        
+        
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         

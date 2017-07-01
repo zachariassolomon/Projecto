@@ -52,7 +52,17 @@ public class ProjectServlet extends HttpServlet {
         request.setAttribute("recentProjects", recentProjects);
         request.setAttribute("projects", projects);
         
-        request.getRequestDispatcher("WEB-INF/Project.jsp").forward(request, response);
+        //String[] tasks = {"1. Pintar a sala", "2. Construir a garagem", "3. Viver a vida","4. Outra tarefa","5. Mais uma","6. Elas continuam", "7. Ainda outra", "8. Tarefa final"};
+        String[] tasks = {"Pintar a sala", "Construir a garagem", "Viver a vida","Outra tarefa","Mais uma","Elas continuam", "Ainda outra", "Tarefa final"};        
+        String[] subTasks = {"Saltar para a esquerda", "Rodopiar duas vezes", "Subir uma escada", "Puxar uma corda", "Descer uma rampa", "Cair num poço", "Descobrir o tesouro", "Morrer preso"};        
+        
+        String[] members = {"Gabriel", "João", "Joel", "Nelson"};        
+        
+        request.setAttribute("tasks",tasks);
+        request.setAttribute("subTasks",subTasks);
+        request.setAttribute("members",members);
+        
+        request.getRequestDispatcher("WEB-INF/ProjectAux.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

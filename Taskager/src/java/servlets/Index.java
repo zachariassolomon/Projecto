@@ -5,13 +5,18 @@
  */
 package servlets;
 
+import com.timgroup.statsd.NonBlockingStatsDClient;
+import com.timgroup.statsd.StatsDClient;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.Constants;
 
 /**
  *
@@ -20,6 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "Index", urlPatterns = {"/Index"})
 public class Index extends HttpServlet {
 
+    
+    //////////// SETUP METERING AND LOGGING //////////
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final StatsDClient statsd = new NonBlockingStatsDClient(Constants.STATSD_PREFIX, Constants.STATSD_HOST, Constants.STATSD_PORT);
+    private final String METHOD = "Index";
+    //////////////////////////////////////////////////
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,26 +44,24 @@ public class Index extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
-    {
+    {   
+        // LOGOUT
+        String logout = request.getParameter("logout");
+        if(logout.equals("true")) {
+            request.getSession().removeAttribute("user_id");
+        }
         
-        response.setContentType("text/html;charset=UTF-8");
+        //ALREADY LOGGED IN
+        Object user_id = request.getSession().getAttribute("user_id");
+        if((user_id!=null)) {
+            logger.log(Level.INFO, "Utilizador já está logado com user_id: " + user_id);
+            request.getRequestDispatcher("Login").forward(request, response);
+            return;
+        }
         
-        String[][] projects = {
-            {"AA/SI", "Tecnologias Java Web, incluindo beans, servlets e páginas JSP com tags JSTL"},
-            {"Primecog", "Dashboard realizado em Angular 2 para a cadeira LEI com o cliente Manuel Alves"},
-            {"EngWeb", "Projeto em Rails para a cadeira de Engenharia Web na Universidade do Minho"},
-            {"ZooKeeper", "Aplicação para gestão de jardins zoológicos"}
-        };
-    
-        String[][] recentProjects = {
-            {"Primecog", "Dashboard realizado em Angular 2 para a cadeira LEI com o cliente Manuel Alves"},
-            {"EngWeb", "Projeto em Rails para a cadeira de Engenharia Web na Universidade do Minho"}
-        };
-        
-        request.setAttribute("recentProjects", recentProjects);
-        request.setAttribute("projects", projects);
-        
+        //NEW SESSION
         request.getRequestDispatcher("WEB-INF/Index.jsp").forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

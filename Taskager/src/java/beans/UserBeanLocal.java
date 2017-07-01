@@ -5,6 +5,8 @@
  */
 package beans;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Local;
 import org.orm.PersistentSession;
 import siaadao.Projeto;
@@ -21,7 +23,7 @@ public interface UserBeanLocal {
 
     Boolean login(org.orm.PersistentSession session, String username, String password);
 
-    siaadao.Projeto[] getProjetos(String username, PersistentSession session);
+    ArrayList<Projeto> getProjetos(String username, PersistentSession session);
 
     Boolean addProjeto(Projeto Projeto, PersistentSession session, String username);
 

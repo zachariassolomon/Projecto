@@ -5,6 +5,10 @@
  */
 package beans;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -49,12 +53,15 @@ public class UserBean implements UserBeanLocal {
     }
 
     @Override
-    public siaadao.Projeto[] getProjetos(String username, PersistentSession session) {
+    public ArrayList<Projeto> getProjetos(String username, PersistentSession session) {
         User user = getUser(username, session);
         if(user==null) 
             return null;
 
-        return user.projetos.toArray();
+        ArrayList<Projeto> projs = new ArrayList(Arrays.asList(user.projetos.toArray()));
+        Collections.sort(projs, (Projeto o1, Projeto o2) -> (o1.getNome()).compareTo(o2.getNome()));
+        
+        return projs;
     }
 
     @Override

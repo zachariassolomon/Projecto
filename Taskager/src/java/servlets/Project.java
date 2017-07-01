@@ -70,8 +70,8 @@ public class Project extends HttpServlet {
         
         String method = request.getMethod();
         if (method.equals("POST")) {
-            String titulo = request.getParameter("titulo");
-            String descricao = request.getParameter("descricao") == null ? "" : request.getParameter("descricao");
+            String titulo = request.getParameter("project_name");
+            String descricao = request.getParameter("project_description") == null ? "" : request.getParameter("project_description");
             
             
 //            try {
@@ -108,7 +108,7 @@ public class Project extends HttpServlet {
                 logger.log(Level.INFO, "Projeto criado com sucesso");
             }
         } else if (method.equals("GET")) {
-            String titulo = request.getParameter("titulo");
+            String titulo = request.getParameter("project_name");
             Projeto proj = projetoBean.getProjeto(Func.getOrCreatePersistentSession(request), titulo);
             if (proj==null) {
                 Func.printToScreen("O projeto que indicou não existe",response);

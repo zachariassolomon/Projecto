@@ -10,6 +10,9 @@ import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -56,7 +59,6 @@ public class Login extends HttpServlet {
         statsd.incrementCounter(METHOD);
         Long starttime = new Date().getTime();
         
-        response.setContentType("text/html;charset=UTF-8");
         Object user_id = request.getSession().getAttribute("user_id");
         if((user_id!=null)) {
             logger.log(Level.INFO, "Utilizador já está logado com user_id: " + user_id);
@@ -73,7 +75,7 @@ public class Login extends HttpServlet {
         if(identifier == null || password == null) {
                 try (PrintWriter out = response.getWriter()) {
                 out.println("Pedido com dados em falta");
-
+        
                 logger.log(Level.INFO, "Pedido de login falhou, dados em falta");
                 return;
             }
@@ -89,59 +91,38 @@ public class Login extends HttpServlet {
             doLogin(request, response);
 
         } else {
-            try (PrintWriter out = response.getWriter()) {
-                out.println("Login falhou, utilizador inexistente ou credenciais erradas");
-                logger.log(Level.INFO, "Logou falhou, utilizador inexistente ou credenciais erradas");
-            }
+            request.setAttribute("login_ok","no");
+            request.getRequestDispatcher("WEB-INF/Index.jsp").forward(request, response);
         }
         
         statsd.recordExecutionTimeToNow(METHOD, starttime);
     }
     
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = (String) request.getSession().getAttribute("user_id"); // TODO - Fix this  
-        Projeto[] projs = userBean.getProjetos(username, Func.getOrCreatePersistentSession(request));
         
-        if(projs==null) {
-            logger.log(Level.SEVERE, "User not found, somethin went terribly wrong!");
-            return; /// TODO: Fix this
-        }
+        response.setContentType("text/html;charset=UTF-8");
+        String username = (String) request.getSession().getAttribute("user_id");
+        ArrayList<Projeto> projects = userBean.getProjetos(username, Func.getOrCreatePersistentSession(request));
+               
         
-        String[][] projects = new String[projs.length][2];  // TODO: fix this
+        // TODO: fix this - creating for all projects(should be for open ones (maybe change query)
+        ArrayList<Projeto> recents = new ArrayList<>();
         
-        for(int i = 0; i<projs.length; i++ ) {
-            if(projs[i].getEstado() != Constants.PROJETO_CLOSED) {
-                projects[i][0] = projs[i].getNome();
-                projects[i][1] = projs[i].getDescricao();
+        for(Projeto p : projects) {
+            if(!p.getEstado().equals(Constants.PROJETO_CLOSED)) {
+                recents.add(p);
             }
+            
         }
-//        String[][] projects = {
-//             {"AA/SI", "Tecnologias Java Web, incluindo beans, servlets e páginas JSP com tags JSTL"},
-//             {"EngWeb", "Projeto em Rails para a cadeira de Engenharia Web na Universidade do Minho"},
-//             {"Primecog", "Dashboard realizado em Angular 2 para a cadeira LEI com o cliente Manuel Alves"},
-//             {"ZooKeeper", "Aplicação para gestão de jardins zoológicos"},
-//             {"",""}
-//         };
+        
 
- //        List<String[]> projs;
-
-         String[][] recentProjects = {
-             {"Primecog", "Dashboard realizado em Angular 2 para a cadeira LEI com o cliente Manuel Alves"},
-             {"EngWeb", "Projeto em Rails para a cadeira de Engenharia Web na Universidade do Minho"}
-         };
-
-         String aux = request.getParameter("project_name");
-
-         if (aux != null){
-             projects[projects.length-1][0] = aux;
-             projects[projects.length-1][1] = request.getParameter("project_description");
-         }
-              
-         request.setAttribute("recentProjects", recentProjects);
+        Collections.sort(recents, (Projeto o1, Projeto o2) -> ((Long)o1.getLast_updated()).compareTo((Long)o2.getLast_updated()));
+    
+         
+         request.setAttribute("recentProjects", recents.subList(0, 3));
          request.setAttribute("projects", projects);
 
          request.getRequestDispatcher("WEB-INF/Home.jsp").forward(request, response);
-        
         
     }
     

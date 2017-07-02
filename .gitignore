@@ -46,7 +46,6 @@ Taskager/nbdist/
 nbactions.xml
 nb-configuration.xml
 wildfly-10.1.0.Final/
-Taskager_joao/
 
 # OS
 .DS_Store

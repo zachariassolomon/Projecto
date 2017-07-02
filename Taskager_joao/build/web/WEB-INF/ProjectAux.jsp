@@ -4,8 +4,6 @@
     Author     : joao
 --%>
 
-<%@page import="siaadao.User"%>
-<%@page import="java.util.ArrayList"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -116,16 +114,17 @@
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-left">                    
-                    <li><li><a href="Login">Projetos</a></li></li>
+                    <li><li><a href="Home">Projetos</a></li></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">       
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:white;">
-                            <span class="glyphicon glyphicon-user"></span>&nbsp;  <%= request.getAttribute("username")%>
+                            <span class="glyphicon glyphicon-user"></span>&nbsp; João
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="Index?logout=true"><span class="glyphicon glyphicon-log-out"></span> &nbsp;Sair</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-cog"></span> &nbsp;O meu perfil</a></li>
+                            <li><a href="Index"><span class="glyphicon glyphicon-log-out"></span> &nbsp;Sair</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -138,7 +137,7 @@
                 <h2 style="text-align:left">                
                     <span class="glyphicon glyphicon-folder-open" ></span>&nbsp;
                     <b><%=request.getParameter("project_name")%></b>
-                    <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getParameter("project_description")%></span>
+                    <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getAttribute("project_description")%></span>
                 </h2>
             </div>
             <div class="col-sm-2">
@@ -173,9 +172,9 @@
 
         
         <%
-            ArrayList<siaadao.Tarefa> tasks = (ArrayList<siaadao.Tarefa>) request.getAttribute("tasks");
-            ArrayList<User> members = (ArrayList<User>) request.getAttribute("members");
-            String project_name = (String) request.getAttribute("project_name");
+            String[] tasks = (String[]) request.getAttribute("tasks");
+            String[] subTasks = (String[]) request.getAttribute("subTasks");
+            String[] members = (String[]) request.getAttribute("members");
         %>
 
         
@@ -184,7 +183,7 @@
                 <ul class="nav nav-pills nav-stacked">
                     
                 <li class="active" data-toggle="modal" data-target="#newTaskModal" >
-                    <a href="#" style="font-size:20px;">Tarefas
+                    <a ref="#" style="font-size:20px;">Tarefas
                         <span title="Adicionar tarefa" class="glyphicon glyphicon-plus pull-right" 
                               data-toggle="tooltip" data-placement="bottom" title="Adicionar tarefa" style="font-size:25px;"></span>
                     </a>
@@ -211,17 +210,17 @@
             <div style="background:none" class="scrollmenu">
    
                 <c:forEach var ="task" items="${tasks}">
-                    <div class="panel panel-primary tasklist" id="${task.getTitulo()}">
+                    <div class="panel panel-primary tasklist" id="${task}">
                         <div class="panel-heading" data-toggle="modal" data-target="#newSubTaskModal">
-                            <b style="text-transform: uppercase">${task.getTitulo()}</b>
+                            <b>${task}</b>
                             <span data-toggle="tooltip" data-placement="bottom" title="Adicionar sub-tarefa" class="glyphicon glyphicon-plus-sign pull-right" style="font-size:20px;"
                                    ></span>
                         </div>
                         <div class="panel-body">
-                            <c:forEach var ="subTask" items="${task.subtarefas}">
+                            <c:forEach var ="subTask" items="${subTasks}">
                                 <div class="well" style="width:98%;margin-left:1%; margin-bottom:4px;padding:5px;"
-                                     onclick="$('#modal${subTask.getTitulo().replaceAll(" ","")}').modal('show')">
-                                    <p>${subTask.getTitulo()}</p>
+                                     onclick="$('#modal${subTask.replaceAll(" ","")}').modal('show')">
+                                    <p>${subTask}</p>
                                 </div>
                             </c:forEach>
                         </div>
@@ -281,10 +280,6 @@
                                 <label for="project_description">Descrição:</label>
                                 <textarea class="form-control" rows="4" cols="76" name="task_description" form="new_task" required="required" placeholder="Descrição da tarefa"></textarea>
                             </div>
-                            <div class="form-group">
-                                <label for="project_description">Prioridade (1 a 7): </label>
-                                <input type="number" min="1" max="7" name="task_priority" form="new_task" value="1" placeholder="1-7" style="width:40px;">
-                            </div>      
                             <button type="submit" class="btn btn-default btn-success">Adicionar</button>
                         </form>
                         
@@ -325,10 +320,6 @@
                                 <label for="project_description">Descrição:</label>
                                 <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask" required="required" placeholder="Descrição da sub-tarefa"></textarea>
                             </div>
-                            <div class="form-group">
-                                <label for="project_description">Prioridade (1 a 7): </label>
-                                <input type="number" min="1" max="7" name="subtask_priority" form="new_subtask" value="1" placeholder="1-7" style="width:40px;">
-                            </div>
                             <button type="submit" class="btn btn-default btn-success">Adicionar</button>
                         </form>
                         
@@ -357,7 +348,7 @@
                         <h4 class="modal-title">Partilhar ${request.getParameter("project_name")}</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="new_project" action="Tarefa"> <!--onsubmit="alert(this.firstChild.value)"-->
+                        <form id="new_project" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
                             <div class="form-group">
                                 <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
                                 <label for="person_name">Convidar utilizador(es)</label>
@@ -370,7 +361,7 @@
                         <p style="font-size:18px;">
                             <c:forEach var ="member" items="${members}">
                                 <!--<span data-toggle="tooltip" data-placement="bottom" title="${member}" class="label label-primary">${member}</span>-->
-                                <span class="label label-primary">${member.getUsername()}</span>
+                                <span class="label label-primary">${member}</span>
                             </c:forEach>
                         </p>
                         

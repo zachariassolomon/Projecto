@@ -18,4 +18,6 @@ public interface TarefaBeanLocal {
         ArrayList<siaadao.Tarefa> getTarefas(PersistentSession session, String project_name);
         
         boolean addTarefa(PersistentSession session, String task_name, String task_description, int task_priority, String project_name);
+
+    Boolean addSubtarefa(PersistentSession session, String descricao, String titulo, int prioridade, int tarefa_mae);
 }

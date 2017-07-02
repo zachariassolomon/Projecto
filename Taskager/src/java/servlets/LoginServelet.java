@@ -33,7 +33,7 @@ import utils.Func;
  * @author siaa
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+public class LoginServelet extends HttpServlet {
 
     @EJB
     private UserBeanLocal userBean;

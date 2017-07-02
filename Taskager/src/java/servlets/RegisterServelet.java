@@ -5,33 +5,41 @@
  */
 package servlets;
 
-import beans.ProjetoBeanLocal;
-import beans.UserBeanLocal;
+import com.timgroup.statsd.NonBlockingStatsDClient;
+import com.timgroup.statsd.StatsDClient;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import siaadao.Projeto;
-import siaadao.User;
+
 import utils.Func;
+import utils.Constants;
+import beans.UserBeanLocal;
+import org.orm.PersistentSession;
 
 /**
  *
- * @author nelson
+ * @author siaa
  */
-@WebServlet(name = "Tarefa", urlPatterns = {"/Tarefa"})
-public class Tarefa extends HttpServlet {
+@WebServlet(name = "Register", urlPatterns = {"/Register"})
+public class RegisterServelet extends HttpServlet {
 
     @EJB
     private UserBeanLocal userBean;
-
-    @EJB
-    private ProjetoBeanLocal projetoBean;
-
+    
+    //////////// SETUP METERING AND LOGGING //////////
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final StatsDClient statsd = new NonBlockingStatsDClient(Constants.STATSD_PREFIX, Constants.STATSD_HOST, Constants.STATSD_PORT);
+    private final String METHOD = "Register";
+    //////////////////////////////////////////////////
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,25 +51,45 @@ public class Tarefa extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
-        String username = (String) request.getSession().getAttribute("user_id");
-        String project_name = (String) request.getParameter("project_name");
+        statsd.incrementCounter(METHOD);
+        Long starttime = new Date().getTime();
+        
+        response.setContentType("text/html;charset=UTF-8");
+        String email = request.getParameter("email");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        logger.log(Level.INFO, "Pedido de registo para user " + username + " e email " + email);
+        if(email == null || username == null || password == null) {
+            try (PrintWriter out = response.getWriter()) {
+                out.println("Pedido com dados em falta");
 
-        String member = request.getParameter("person_name");
-        if(member != null) {
-            Projeto proj = projetoBean.getProjeto(Func.getOrCreatePersistentSession(request), project_name);
-            userBean.addProjeto(proj, Func.getOrCreatePersistentSession(request), member);
+                logger.log(Level.INFO, "Pedido de registo falhou, dados em falta");
+                return;
+            }
+        } 
+        
+        
+        Boolean result = userBean.register(Func.getOrCreatePersistentSession(request), username, password, email);
+        
+        if (result == true ) {
+            logger.log(Level.INFO, "Registado com sucesso");
+
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.getSession().setAttribute("user_id", username);
+            
+            request.getRequestDispatcher("Login").forward(request, response);
+        } else {
+            try (PrintWriter out = response.getWriter()) {
+                out.println("Registo falhou, utilizador já existe");
+                logger.log(Level.INFO, "Registo falhou");
+            }
         }
         
-        ArrayList<siaadao.Tarefa> tarefas = projetoBean.getTarefas(Func.getOrCreatePersistentSession(request), project_name);
-        ArrayList<User> members = projetoBean.getMembers(Func.getOrCreatePersistentSession(request), project_name);
+        statsd.recordExecutionTimeToNow(METHOD, starttime);
         
-       
-        request.setAttribute("tasks", tarefas);
-        request.setAttribute("members", members);
-        request.setAttribute("username", username);       
-        request.getRequestDispatcher("WEB-INF/Project.jsp").forward(request, response);
 
     }
 

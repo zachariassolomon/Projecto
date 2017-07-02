@@ -4,8 +4,11 @@
     Author     : joao
 --%>
 
+<%@page import="java.util.Map"%>
 <%@page import="siaadao.User"%>
+<%@page import="siaadao.Tarefa"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.HashMap"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -173,9 +176,10 @@
 
         
         <%
-            ArrayList<siaadao.Tarefa> tasks = (ArrayList<siaadao.Tarefa>) request.getAttribute("tasks");
+            HashMap<siaadao.Tarefa,ArrayList<siaadao.Tarefa>> tasks = (HashMap<siaadao.Tarefa,ArrayList<siaadao.Tarefa>>) request.getAttribute("tasks");
             ArrayList<User> members = (ArrayList<User>) request.getAttribute("members");
             String project_name = (String) request.getAttribute("project_name");
+            
         %>
 
         
@@ -190,7 +194,7 @@
                     </a>
                 </li>
                     
-                <c:forEach var ="task" items="${tasks}">
+                <c:forEach var ="task" items="${tasks.entrySet()}">
                     <!--<li><a onclick="func('${task}',1)" href="#${task}"><b>${task}</b></a></li>-->
                     <li><a onclick="func('${task}',1)" style="font-size:20px;" href="#${task}">${task}</a></li>
                     </c:forEach>
@@ -210,15 +214,15 @@
         <div class="col-sm-10">
             <div style="background:none" class="scrollmenu">
    
-                <c:forEach var ="task" items="${tasks}">
-                    <div class="panel panel-primary tasklist" id="${task.getTitulo()}">
+                <c:forEach var ="task" items="${tasks.entrySet()}">
+                    <div class="panel panel-primary tasklist" id="${task.getKey().getTitulo()}">
                         <div class="panel-heading" data-toggle="modal" data-target="#newSubTaskModal">
-                            <b style="text-transform: uppercase">${task.getTitulo()}</b>
+                            <b style="text-transform: uppercase">${task.getKey().getTitulo()}</b>
                             <span data-toggle="tooltip" data-placement="bottom" title="Adicionar sub-tarefa" class="glyphicon glyphicon-plus-sign pull-right" style="font-size:20px;"
                                    ></span>
                         </div>
                         <div class="panel-body">
-                            <c:forEach var ="subTask" items="${task.subtarefas}">
+                            <c:forEach var ="subTask" items="${task.getValue()}">
                                 <div class="well" style="width:98%;margin-left:1%; margin-bottom:4px;padding:5px;"
                                      onclick="$('#modal${subTask.getTitulo().replaceAll(" ","")}').modal('show')">
                                     <p>${subTask.getTitulo()}</p>
@@ -269,16 +273,16 @@
                         <h4 class="modal-title">Criar tarefa</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="new_task" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                        <form id="new_task" action="Tarefa"> <!--onsubmit="alert(this.firstChild.value)"-->
                             <div class="form-group">
                                 
                                 <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
                                 
-                                <label for="project_name">Título:</label>
+                                <label for="task_name">Título:</label>
                                 <input type="text" id="project_name" class="form-control" name="task_name" form="new_task" value="" required="required" placeholder="Título da tarefa">
                             </div>
                             <div class="form-group">
-                                <label for="project_description">Descrição:</label>
+                                <label for="task_description">Descrição:</label>
                                 <textarea class="form-control" rows="4" cols="76" name="task_description" form="new_task" required="required" placeholder="Descrição da tarefa"></textarea>
                             </div>
                             <div class="form-group">
@@ -321,16 +325,17 @@
                         <form id="new_subtask" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
                             <div class="form-group">
                                 <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
+                                <input type="hidden" id="tarefa_name" class="form-control"  name="tarefa_name" value="<%= request.getParameter("project_name") %>" required="required">
                                 
-                                <label for="project_name">Título:</label>
+                                <label for="subtask_name">Título:</label>
                                 <input type="text" id="project_name" class="form-control" form="new_subtask" name="subtask_name" value="" required="required" placeholder="Título da sub-tarefa">
                             </div>
                             <div class="form-group">
-                                <label for="project_description">Descrição:</label>
+                                <label for="subtask_description">Descrição:</label>
                                 <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask" required="required" placeholder="Descrição da sub-tarefa"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="project_description">Prioridade: </label> &nbsp;&nbsp;
+                                <label for="subtask_priority">Prioridade: </label> &nbsp;&nbsp;
                                 <input type="number" min="0" max="7" name="subtask_priority" form="new_subtask" value="4" required="required" placeholder="0-7" style="width:40px;">
                                 <div class="form-group"><label for="project_description">
                                     (Mínimo: 0<span class="glyphicon glyphicon-arrow-down"></span> 

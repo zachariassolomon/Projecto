@@ -1,5 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license header, choose License Headers in ProjectServelet Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -32,7 +32,7 @@ import utils.Func;
  * @author siaa
  */
 @WebServlet(name = "Project", urlPatterns = {"/Project"})
-public class Project extends HttpServlet {
+public class ProjectServelet extends HttpServlet {
 
     @EJB
     private UserBeanLocal userBean;
@@ -72,7 +72,7 @@ public class Project extends HttpServlet {
             try {
                 tx = session.beginTransaction();
             } catch (PersistentException ex) {
-                Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProjectServelet.class.getName()).log(Level.SEVERE, null, ex);
             }
             Projeto proj = projetoBean.create(session, titulo, descricao);
             if (proj==null) {
@@ -86,7 +86,7 @@ public class Project extends HttpServlet {
                     try {
                         tx.commit();
                     } catch (PersistentException ex) {
-                        Logger.getLogger(Project.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ProjectServelet.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     if(!success) {
                         logger.log(Level.SEVERE, "Pedido de associação de user ao projeto falhou");

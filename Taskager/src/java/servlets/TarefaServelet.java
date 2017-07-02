@@ -5,41 +5,39 @@
  */
 package servlets;
 
-import com.timgroup.statsd.NonBlockingStatsDClient;
-import com.timgroup.statsd.StatsDClient;
+import beans.ProjetoBeanLocal;
+import beans.TarefaBeanLocal;
+import beans.UserBeanLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import siaadao.Projeto;
+import siaadao.User;
 import utils.Func;
-import utils.Constants;
-import beans.UserBeanLocal;
-import org.orm.PersistentSession;
 
 /**
  *
- * @author siaa
+ * @author nelson
  */
-@WebServlet(name = "Register", urlPatterns = {"/Register"})
-public class Register extends HttpServlet {
+@WebServlet(name = "Tarefa", urlPatterns = {"/Tarefa"})
+public class TarefaServelet extends HttpServlet {
+
+    @EJB
+    private TarefaBeanLocal tarefaBean;
 
     @EJB
     private UserBeanLocal userBean;
-    
-    //////////// SETUP METERING AND LOGGING //////////
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private final StatsDClient statsd = new NonBlockingStatsDClient(Constants.STATSD_PREFIX, Constants.STATSD_HOST, Constants.STATSD_PORT);
-    private final String METHOD = "Register";
-    //////////////////////////////////////////////////
-    
+
+    @EJB
+    private ProjetoBeanLocal projetoBean;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -51,45 +49,43 @@ public class Register extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        statsd.incrementCounter(METHOD);
-        Long starttime = new Date().getTime();
-        
         response.setContentType("text/html;charset=UTF-8");
-        String email = request.getParameter("email");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
         
-        logger.log(Level.INFO, "Pedido de registo para user " + username + " e email " + email);
-        if(email == null || username == null || password == null) {
-            try (PrintWriter out = response.getWriter()) {
-                out.println("Pedido com dados em falta");
+        String username = (String) request.getSession().getAttribute("user_id");
+        String project_name = (String) request.getParameter("project_name");
 
-                logger.log(Level.INFO, "Pedido de registo falhou, dados em falta");
-                return;
-            }
-        } 
-        
-        
-        Boolean result = userBean.register(Func.getOrCreatePersistentSession(request), username, password, email);
-        
-        if (result == true ) {
-            logger.log(Level.INFO, "Registado com sucesso");
-
-            request.setAttribute("username", username);
-            request.setAttribute("password", password);
-            request.getSession().setAttribute("user_id", username);
-            
-            request.getRequestDispatcher("Login").forward(request, response);
-        } else {
-            try (PrintWriter out = response.getWriter()) {
-                out.println("Registo falhou, utilizador já existe");
-                logger.log(Level.INFO, "Registo falhou");
-            }
+        // ADD MEMBER
+        String member = request.getParameter("person_name");
+        if(member != null) {
+            Projeto proj = projetoBean.getProjeto(Func.getOrCreatePersistentSession(request), project_name);
+            userBean.addProjeto(proj, Func.getOrCreatePersistentSession(request), member);
         }
         
-        statsd.recordExecutionTimeToNow(METHOD, starttime);
+        // ADD TAREFA
+        String task_name = request.getParameter("task_name");
         
+        if(task_name != null ) {
+            String task_description = request.getParameter("task_description");
+            int task_priority = Integer.valueOf(request.getParameter("task_priority"));
+            Boolean result = tarefaBean.addTarefa(Func.getOrCreatePersistentSession(request), task_name, task_description, task_priority, project_name);
+            //TODO : do something with result
+        }
+        
+        
+        // Show project details default
+        ArrayList<siaadao.Tarefa> tarefas = projetoBean.getTarefas(Func.getOrCreatePersistentSession(request), project_name);
+        HashMap<siaadao.Tarefa,ArrayList<siaadao.Tarefa>> tasks = new HashMap();
+        for(siaadao.Tarefa tar : tarefas) {
+            tasks.put(tar, new ArrayList(Arrays.asList(tar.subtarefas.toArray())));
+        }    
+        
+        ArrayList<User> members = projetoBean.getMembers(Func.getOrCreatePersistentSession(request), project_name);
+        
+       
+        request.setAttribute("tasks", tasks);
+        request.setAttribute("members", members);
+        request.setAttribute("username", username);       
+        request.getRequestDispatcher("WEB-INF/Project.jsp").forward(request, response);
 
     }
 

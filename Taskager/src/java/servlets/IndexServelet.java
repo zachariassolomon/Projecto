@@ -23,7 +23,7 @@ import utils.Constants;
  * @author joao
  */
 @WebServlet(name = "Index", urlPatterns = {"/Index"})
-public class Index extends HttpServlet {
+public class IndexServelet extends HttpServlet {
 
     
     //////////// SETUP METERING AND LOGGING //////////

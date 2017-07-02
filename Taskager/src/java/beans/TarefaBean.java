@@ -8,6 +8,7 @@ package beans;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -36,6 +37,8 @@ public class TarefaBean implements TarefaBeanLocal {
             tarefa.setTitulo(task_name);
             tarefa.setDescricao(task_description);
             tarefa.setPrioridade(task_priority);
+            tarefa.setData_inicio(new Date().getTime());
+            tarefa.setLast_updated(new Date().getTime());
             proj.tarefas.add(tarefa);
             ProjetoDAO.save(proj);
             return true;
@@ -44,6 +47,7 @@ public class TarefaBean implements TarefaBeanLocal {
         }
         return false;
     }
+    
     
     @Override
     public ArrayList<siaadao.Tarefa> getTarefas(PersistentSession session, String project_name) {
@@ -57,5 +61,10 @@ public class TarefaBean implements TarefaBeanLocal {
         
         return tarefas;
         
+    }
+
+    @Override
+    public Boolean addSubtarefa(PersistentSession session, String descricao, String titulo, int prioridade, int tarefa_mae) {
+        return false;
     }
 }

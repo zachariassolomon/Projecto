@@ -184,7 +184,7 @@
                 <ul class="nav nav-pills nav-stacked">
                     
                 <li class="active" data-toggle="modal" data-target="#newTaskModal" >
-                    <a ref="#" style="font-size:20px;">Tarefas
+                    <a href="#" style="font-size:20px;">Tarefas
                         <span title="Adicionar tarefa" class="glyphicon glyphicon-plus pull-right" 
                               data-toggle="tooltip" data-placement="bottom" title="Adicionar tarefa" style="font-size:25px;"></span>
                     </a>
@@ -213,7 +213,7 @@
                 <c:forEach var ="task" items="${tasks}">
                     <div class="panel panel-primary tasklist" id="${task.getTitulo()}">
                         <div class="panel-heading" data-toggle="modal" data-target="#newSubTaskModal">
-                            <b>${task.getTitulo()}</b>
+                            <b style="text-transform: uppercase">${task.getTitulo()}</b>
                             <span data-toggle="tooltip" data-placement="bottom" title="Adicionar sub-tarefa" class="glyphicon glyphicon-plus-sign pull-right" style="font-size:20px;"
                                    ></span>
                         </div>
@@ -281,6 +281,10 @@
                                 <label for="project_description">Descrição:</label>
                                 <textarea class="form-control" rows="4" cols="76" name="task_description" form="new_task" required="required" placeholder="Descrição da tarefa"></textarea>
                             </div>
+                            <div class="form-group">
+                                <label for="project_description">Prioridade (1 a 7): </label>
+                                <input type="number" min="1" max="7" name="task_priority" form="new_task" value="1" placeholder="1-7" style="width:40px;">
+                            </div>      
                             <button type="submit" class="btn btn-default btn-success">Adicionar</button>
                         </form>
                         
@@ -320,6 +324,10 @@
                             <div class="form-group">
                                 <label for="project_description">Descrição:</label>
                                 <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask" required="required" placeholder="Descrição da sub-tarefa"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="project_description">Prioridade (1 a 7): </label>
+                                <input type="number" min="1" max="7" name="subtask_priority" form="new_subtask" value="1" placeholder="1-7" style="width:40px;">
                             </div>
                             <button type="submit" class="btn btn-default btn-success">Adicionar</button>
                         </form>

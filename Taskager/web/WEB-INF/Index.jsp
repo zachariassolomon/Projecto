@@ -39,6 +39,7 @@ and open the template in the editor.
                 <form class="navbar-form navbar-right" action="Login" method="post">
                 <form class="navbar-form navbar-right" action="Index">
                     <div class="form-group">
+                        <label style="color:white;">Já possui conta? Introduza aqui os seus dados!</label>&nbsp;
                         <% 
                             String login_ok = (String) request.getAttribute("login_ok");
                             

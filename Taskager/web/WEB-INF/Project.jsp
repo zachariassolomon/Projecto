@@ -141,7 +141,7 @@
                     <h2 style="text-align:left">                
                         <span class="glyphicon glyphicon-folder-open" ></span>&nbsp;
                         <b><%=request.getParameter("project_name")%></b>
-                        <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getAttribute("project_description")%></span>
+                        <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getParameter("project_description")%></span>
                     </h2>
                 </div>
                 <div class="col-sm-1">

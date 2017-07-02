@@ -102,26 +102,26 @@ public class LoginServelet extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         String username = (String) request.getSession().getAttribute("user_id");
-        ArrayList<Projeto> projects = userBean.getProjetos(username, Func.getOrCreatePersistentSession(request));
-               
+        ArrayList<Projeto> projects_all = userBean.getProjetos(username, Func.getOrCreatePersistentSession(request));
+        ArrayList<Projeto> projects_not_closed = new ArrayList<Projeto>();
         
         // TODO: fix this - creating for all projects(should be for open ones (maybe change query)
         ArrayList<Projeto> recents = new ArrayList<>();
         
-        for(Projeto p : projects) {
+        for(Projeto p : projects_all) {
             if(!p.getEstado().equals(Constants.PROJETO_CLOSED)) {
+                projects_not_closed.add(p);
                 recents.add(p);
             }
             
         }
-        
 
         Collections.sort(recents, (Projeto o1, Projeto o2) -> ((Long)o1.getLast_updated()).compareTo((Long)o2.getLast_updated()));
     
         int size = (recents.size()>3) ? 3 :  recents.size();
         
          request.setAttribute("recentProjects", recents.subList(0, size));
-         request.setAttribute("projects", projects);
+         request.setAttribute("projects", projects_not_closed);
          request.setAttribute("username", username);
                  
          request.getRequestDispatcher("WEB-INF/Home.jsp").forward(request, response);

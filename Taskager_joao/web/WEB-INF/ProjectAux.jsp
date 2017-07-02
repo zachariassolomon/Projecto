@@ -151,7 +151,8 @@
                         <!--<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Em progresso-->
                         <%
                            String project_status = (String) request.getAttribute("project_status");
-                           if (project_status.equals("Em progresso")) out.println(
+                           
+                           if (project_status==null || project_status.equals("Em progresso")) out.println(
                                    "<button class=\"btn btn-primary dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Em progresso");
                            else if (project_status.equals("Fechado")) out.println(
                                    "<button class=\"btn dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Fechado");

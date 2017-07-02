@@ -249,7 +249,7 @@
    
                 <c:forEach var ="task" items="${tasks.entrySet()}">
                     <div class="panel panel-primary tasklist" id="${task.getKey().getTitulo()}">
-                        <div class="panel-heading" data-toggle="modal" data-target="#newSubTaskModal">
+                        <div class="panel-heading" data-toggle="modal" data-target="#newSubTaskModal${task.getKey().getTitulo().replaceAll(" ","")}">
                             <b style="text-transform: uppercase">${task.getKey().getTitulo()}</b>
                             <span data-toggle="tooltip" data-placement="bottom" title="Adicionar sub-tarefa" class="glyphicon glyphicon-plus-sign pull-right" style="font-size:20px;"
                                    ></span>
@@ -343,50 +343,50 @@
         <!-- 
             MODAL: Criar nova SUB-tarefa
         -->
-        
-        <div class="modal fade" id="newSubTaskModal" role="dialog">
-            <div class="modal-dialog">
+        <c:forEach var ="task" items="${tasks.entrySet()}">
+            <div class="modal fade" id="newSubTaskModal${task.getKey().getTitulo().replaceAll(" ","")}" role="dialog">
+                <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Criar sub-tarefa</h4>
-                        <h5><%=request.getParameter("project_name")%></h5>
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Criar sub-tarefa</h4>
+                            <h5><label>Tarefa: </label> ${task.getKey().getTitulo()}</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form id="new_subtask${task.getKey().getTitulo().replaceAll(" ","")}" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                                <div class="form-group">
+                                    <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
+                                    <input type="hidden" id="task_name" class="form-control"  name="task_name" value="${task.getKey().getTitulo().replaceAll(" ","")}" required="required">
+
+                                    <label for="subtask_name">Título:</label>
+                                    <input type="text" id="project_name" class="form-control" form="new_subtask${task.getKey().getTitulo().replaceAll(" ","")}" name="subtask_name" value="" required="required" placeholder="Título da sub-tarefa">
+                                </div>
+                                <div class="form-group">
+                                    <label for="subtask_description">Descrição:</label>
+                                    <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask${task.getKey().getTitulo().replaceAll(" ","")}" required="required" placeholder="Descrição da sub-tarefa"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subtask_priority">Prioridade: </label> &nbsp;&nbsp;
+                                    <input type="number" min="0" max="7" name="subtask_priority" form="new_subtask${task.getKey().getTitulo().replaceAll(" ","")}" value="4" required="required" placeholder="0-7" style="width:40px;">
+                                    <div class="form-group"><label for="project_description">
+                                        (Mínimo: 0<span class="glyphicon glyphicon-arrow-down"></span> 
+                                        Máximo: 7<span class="glyphicon glyphicon-arrow-up"></span>) </label>
+                                    </div>    
+                                </div>
+                                <button type="submit" class="btn btn-default btn-success">Adicionar</button>
+                            </form>
+
+                        </div>
+                        <!--<div class="modal-footer">
+                            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>-->
                     </div>
-                    <div class="modal-body">
-                        <form id="new_subtask" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
-                            <div class="form-group">
-                                <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
-                                <input type="hidden" id="tarefa_name" class="form-control"  name="tarefa_name" value="<%= request.getParameter("project_name") %>" required="required">
-                                
-                                <label for="subtask_name">Título:</label>
-                                <input type="text" id="project_name" class="form-control" form="new_subtask" name="subtask_name" value="" required="required" placeholder="Título da sub-tarefa">
-                            </div>
-                            <div class="form-group">
-                                <label for="subtask_description">Descrição:</label>
-                                <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask" required="required" placeholder="Descrição da sub-tarefa"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="subtask_priority">Prioridade: </label> &nbsp;&nbsp;
-                                <input type="number" min="0" max="7" name="subtask_priority" form="new_subtask" value="4" required="required" placeholder="0-7" style="width:40px;">
-                                <div class="form-group"><label for="project_description">
-                                    (Mínimo: 0<span class="glyphicon glyphicon-arrow-down"></span> 
-                                    Máximo: 7<span class="glyphicon glyphicon-arrow-up"></span>) </label>
-                                </div>    
-                            </div>
-                            <button type="submit" class="btn btn-default btn-success">Adicionar</button>
-                        </form>
-                        
-                    </div>
-                    <!--<div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
-                    </div>-->
+
                 </div>
-
             </div>
-        </div>
-                                
+        </c:forEach>                   
                                 
         
         <!-- 

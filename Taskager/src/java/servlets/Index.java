@@ -47,7 +47,7 @@ public class Index extends HttpServlet {
     {   
         // LOGOUT
         String logout = request.getParameter("logout");
-        if(logout.equals("true")) {
+        if(logout != null && logout.equals("true")) {
             request.getSession().removeAttribute("user_id");
         }
         

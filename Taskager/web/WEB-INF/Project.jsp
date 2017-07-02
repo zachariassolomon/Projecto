@@ -137,19 +137,53 @@
         
         <div style="margin-left:1%;width:98%;">
             <div class="row">
-            <div class="col-sm-10">
-                <h2 style="text-align:left">                
-                    <span class="glyphicon glyphicon-folder-open" ></span>&nbsp;
-                    <b><%=request.getParameter("project_name")%></b>
-                    <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getParameter("project_description")%></span>
-                </h2>
-            </div>
-            <div class="col-sm-2">
-                <!--<button class="btn btn-success" data-toggle="tooltip" data-placement="left" title="Todos os projetos" onclick="alert('projects')">Projetos</button>-->
-                <button class="btn btn-warning pull-right" style="margin-right:0%;"
-                        data-toggle="modal" data-target="#shareModal" onclick="this.blur();">
-                    Partilhar&nbsp;&nbsp;<span class="glyphicon glyphicon-share"></span></button>
-            </div>
+                <div class="col-sm-10">
+                    <h2 style="text-align:left">                
+                        <span class="glyphicon glyphicon-folder-open" ></span>&nbsp;
+                        <b><%=request.getParameter("project_name")%></b>
+                        <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getAttribute("project_description")%></span>
+                    </h2>
+                </div>
+                <div class="col-sm-1">
+                    <script>
+                        function fillAndSubmitProjectForm(data){
+                            document.getElementById('project_status').value = data;
+                            document.getElementById('project_status_form').submit();
+                        }
+                    </script>
+                    <div class="dropdown">
+                        <!--<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Em progresso-->
+                        <%
+                           String project_status = (String) request.getAttribute("project_status");
+                           
+                           if (project_status==null || project_status.equals("Em progresso")) out.println(
+                                   "<button class=\"btn btn-primary dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Em progresso");
+                           else if (project_status.equals("Fechado")) out.println(
+                                   "<button class=\"btn dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Fechado");
+                           if (project_status.equals("Parado")) out.println(
+                                   "<button class=\"btn btn-danger dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Parado");
+                        %>
+                        <!--<button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">Parado-->
+                        <!--<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Fechado-->
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" onclick="fillAndSubmitProjectForm(this.innerHTML)">Em progresso</a></li>
+                            <li><a href="#" onclick="fillAndSubmitProjectForm(this.innerHTML)">Parado</a></li>
+                            <li><a href="#" onclick="fillAndSubmitProjectForm(this.innerHTML)">Fechado</a></li>
+                        </ul>
+                    </div>
+                    
+                    <form id="project_status_form" action="Tarefa">
+                        <input type="hidden" name="project_name" value="<%=request.getParameter("project_name")%>">
+                        <input id="project_status" type="hidden" name="project_status" value="subTask">
+                    </form>
+                </div>
+                <div class="col-sm-1">
+                    <!--<button class="btn btn-success" data-toggle="tooltip" data-placement="left" title="Todos os projetos" onclick="alert('projects')">Projetos</button>-->
+                    <button class="btn btn-warning" style="margin-right:0%;"
+                            data-toggle="modal" data-target="#shareModal" onclick="this.blur();">
+                        Partilhar&nbsp;&nbsp;<span class="glyphicon glyphicon-share"></span></button>
+                </div>
             </div>
             
             <br>
@@ -195,8 +229,7 @@
                 </li>
                     
                 <c:forEach var ="task" items="${tasks.entrySet()}">
-                    <!--<li><a onclick="func('${task}',1)" href="#${task}"><b>${task}</b></a></li>-->
-                    <li><a onclick="func('${task}',1)" style="font-size:20px;" href="#${task}">${task}</a></li>
+                    <li><a onclick="func('${task.getKey().getTitulo()}',1)" style="font-size:20px;" href="#${task.getKey().getTitulo()}">${task.getKey().getTitulo()}</a></li>
                     </c:forEach>
                 </ul>
             </nav>
@@ -412,16 +445,47 @@
                             <h3 class="modal-title" style="color:white">${subTask}</h3>
                         </div>
                         <div class="modal-body" style="background-color:lightgray">
-                            <p><label>Data proposta:</label> 05/07/2017</p>
-                            <p><label>Descrição:</label>
-                                A comida deve ser comprada no Continente.</p>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p><label>Data proposta:</label> 05/07/2017</p>
+                                    <p><label>Descrição:</label>
+                                        A comida deve ser comprada no Continente.</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <script>
+                                        function fillAndSubmitForm(data){
+                                            document.getElementById('subtask_status').value = data;
+                                            document.getElementById('subtask_status_form').submit();
+                                        }
+                                    </script>
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Em progresso
+                                        <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Em progresso</a></li>
+                                            <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Parada</a></li>
+                                            <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Fechada</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <form id="subtask_status_form" action="Project">
+                                        <input type="hidden" name="subtask_name" value="${subTask}">
+                                        <input id="subtask_status" type="hidden" name="subtask_status" value="subTask">
+                                    </form>
+                                </div>
+                            </div>
+                            
                             <hr style="border-bottom:2px solid white">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div>
                                         <h4>Adicionar comentário</h4>
-                                        <textarea class="form-control" rows="4" cols="76" name="comment_text" required="required" placeholder="Escreva um comentário..."></textarea>
-                                        <button type="button" style="margin-top:6px;" class="btn btn-primary" data-dismiss="modal">Adicionar</button>
+                                        <form id="new_comment" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                                            <div class="form-group">
+                                                <textarea class="form-control" rows="4" cols="76" name="comment_text" required="required" placeholder="Escreva um comentário..."></textarea>
+                                                <button type="submit" style="margin-top:6px;" class="btn btn-primary">Adicionar</button>
+                                            </div>
+                                        </form>
                                     </div>
 
                                     <hr>                        
@@ -445,10 +509,15 @@
                                 <div class="col-sm-6" style="border-left:2px solid gray;">
                                     <div>
                                         <h4>Registar atividade</h4>
-                                        <label>Horas:</label> <input type="number" min="0" style="width:50px;"></input> <label>&nbsp;Minutos: &nbsp;</label><input type="number" min="0" max="59" style="width:50px;"></input>
-                                        <br>
-                                        <textarea style="margin-top:10px;" class="form-control" rows="2" cols="76" name="comment_text" required="required" placeholder="Introduza a descrição"></textarea>
-                                        <button type="button" style="margin-top:6px;" class="btn btn-primary" data-dismiss="modal">Registar</button>
+                                        <form id="new_activity" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                                            <div class="form-group">
+                                                <label>Horas:</label> <input type="number" min="0" value="0" name="hours" required="required" style="width:50px;"></input>
+                                                <label>&nbsp;Minutos: &nbsp;</label><input type="number" value="0" name="minutes" required="required" min="0" max="59" style="width:50px;"></input>
+                                                <textarea style="margin-top:10px;" class="form-control" rows="2" cols="76" name="activity_text" required="required" placeholder="Introduza a descrição"></textarea>
+                                                
+                                                <button type="submit" style="margin-top:6px;" class="btn btn-primary">Registar</button>
+                                            </div>
+                                        </form>
                                     </div>
 
                                     <hr>

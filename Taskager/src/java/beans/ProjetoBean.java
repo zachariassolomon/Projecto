@@ -90,6 +90,25 @@ public class ProjetoBean implements ProjetoBeanLocal {
         return members;
     }
 
+    @Override
+    public Boolean changeStatus(PersistentSession session, String project_name, String project_status) {
+        try {
+            Projeto proj = getProjeto(session, project_name);
+            
+            if(proj==null)
+                return null;
+            
+            proj.setEstado(project_status);
+            proj.setLast_updated(new Date().getTime());
+            
+            ProjetoDAO.save(proj);
+            return true;
+        } catch (PersistentException ex) {
+            Logger.getLogger(ProjetoBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
     
 
 }

@@ -27,5 +27,7 @@ public interface ProjetoBeanLocal {
 
     ArrayList<siaadao.User> getMembers(PersistentSession session, String project_name);
 
+    Boolean changeStatus(PersistentSession session, String project_name, String project_status);
+
     
 }

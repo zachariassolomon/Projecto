@@ -53,11 +53,12 @@ public class TarefaServelet extends HttpServlet {
         
         String username = (String) request.getSession().getAttribute("user_id");
         String project_name = (String) request.getParameter("project_name");
+        Projeto proj = projetoBean.getProjeto(Func.getOrCreatePersistentSession(request), project_name);
+        request.setAttribute("project_status", proj.getEstado());
 
         // ADD MEMBER
         String member = request.getParameter("person_name");
         if(member != null) {
-            Projeto proj = projetoBean.getProjeto(Func.getOrCreatePersistentSession(request), project_name);
             userBean.addProjeto(proj, Func.getOrCreatePersistentSession(request), member);
         }
         
@@ -71,6 +72,14 @@ public class TarefaServelet extends HttpServlet {
             //TODO : do something with result
         }
         
+        // CHANGE PROJECT STATUS
+        String project_status = request.getParameter("project_status");
+        if(project_status != null) {
+            projetoBean.changeStatus(Func.getOrCreatePersistentSession(request), project_name, project_status);
+            request.setAttribute("project_status", project_status);
+
+            // TODO : do something with result
+        }
         
         // Show project details default
         ArrayList<siaadao.Tarefa> tarefas = projetoBean.getTarefas(Func.getOrCreatePersistentSession(request), project_name);
@@ -81,7 +90,6 @@ public class TarefaServelet extends HttpServlet {
         
         ArrayList<User> members = projetoBean.getMembers(Func.getOrCreatePersistentSession(request), project_name);
         
-       
         request.setAttribute("tasks", tasks);
         request.setAttribute("members", members);
         request.setAttribute("username", username);       

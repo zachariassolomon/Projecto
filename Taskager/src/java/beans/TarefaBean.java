@@ -17,6 +17,9 @@ import org.orm.PersistentException;
 import org.orm.PersistentSession;
 import siaadao.Projeto;
 import siaadao.ProjetoDAO;
+import siaadao.Tarefa;
+import siaadao.TarefaDAO;
+import utils.Constants;
 
 /**
  *
@@ -65,6 +68,35 @@ public class TarefaBean implements TarefaBeanLocal {
 
     @Override
     public Boolean addSubtarefa(PersistentSession session, String descricao, String titulo, int prioridade, int tarefa_mae) {
+        try {
+            Tarefa tar_mae = getTarefa(session, tarefa_mae);
+            Tarefa subtarefa = new Tarefa();
+            subtarefa.setData_inicio(new Date().getTime());
+            subtarefa.setDescricao(descricao);
+            subtarefa.setEstado(Constants.TAREFA_PROGRESS);
+            subtarefa.setPrioridade(prioridade);
+            subtarefa.setTitulo(titulo);
+            tar_mae.subtarefas.add(subtarefa);
+            TarefaDAO.save(tar_mae);
+            return true;
+        } catch (PersistentException ex) {
+            Logger.getLogger(TarefaBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return false;
     }
+
+    @Override
+    public Tarefa getTarefa(PersistentSession session, int task_id) {
+        
+        Tarefa tar = null;            
+        try {
+            tar = TarefaDAO.getTarefaByORMID(task_id);
+         
+        } catch (PersistentException ex) {
+            Logger.getLogger(TarefaBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return tar;
+    }
+    
+    
 }

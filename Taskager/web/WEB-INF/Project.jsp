@@ -355,10 +355,11 @@
                             <h5><label>Tarefa: </label> ${task.getKey().getTitulo()}</h5>
                         </div>
                         <div class="modal-body">
-                            <form id="new_subtask${task.getKey().getTitulo().replaceAll(" ","")}" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                            <form id="new_subtask${task.getKey().getTitulo().replaceAll(" ","")}" action="Tarefa"> <!--onsubmit="alert(this.firstChild.value)"-->
                                 <div class="form-group">
                                     <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
-                                    <input type="hidden" id="task_name" class="form-control"  name="task_name" value="${task.getKey().getTitulo().replaceAll(" ","")}" required="required">
+                                    <input type="hidden" id="task_name" class="form-control"  name="subtask_task_name" value="${task.getKey().getTitulo()}" required="required">
+                                    <input type="hidden" id="task_id" class="form-control"  name="task_id" value="${task.getKey().getID()}" required="required">
 
                                     <label for="subtask_name">Título:</label>
                                     <input type="text" id="project_name" class="form-control" form="new_subtask${task.getKey().getTitulo().replaceAll(" ","")}" name="subtask_name" value="" required="required" placeholder="Título da sub-tarefa">

@@ -8,6 +8,7 @@ package beans;
 import java.util.ArrayList;
 import javax.ejb.Local;
 import org.orm.PersistentSession;
+import siaadao.Tarefa;
 
 /**
  *
@@ -20,4 +21,6 @@ public interface TarefaBeanLocal {
         boolean addTarefa(PersistentSession session, String task_name, String task_description, int task_priority, String project_name);
 
     Boolean addSubtarefa(PersistentSession session, String descricao, String titulo, int prioridade, int tarefa_mae);
+
+    Tarefa getTarefa(PersistentSession session, int task_id);
 }

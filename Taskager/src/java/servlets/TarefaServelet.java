@@ -64,7 +64,6 @@ public class TarefaServelet extends HttpServlet {
         
         // ADD TAREFA
         String task_name = request.getParameter("task_name");
-        
         if(task_name != null ) {
             String task_description = request.getParameter("task_description");
             int task_priority = Integer.valueOf(request.getParameter("task_priority"));
@@ -80,6 +79,17 @@ public class TarefaServelet extends HttpServlet {
 
             // TODO : do something with result
         }
+        
+        // ADD SUBTAREFA
+        String subtask = request.getParameter("subtask_name");
+        if(subtask != null) {
+            String subtask_task_name = request.getParameter("subtask_task_name");
+            String subtask_description = request.getParameter("subtask_description");
+            int subtask_priority = Integer.valueOf(request.getParameter("subtask_priority"));
+            int task_id = Integer.valueOf(request.getParameter("task_id"));
+            tarefaBean.addSubtarefa(Func.getOrCreatePersistentSession(request), subtask_description, subtask, subtask_priority, task_id);
+        }
+        
         
         // Show project details default
         ArrayList<siaadao.Tarefa> tarefas = projetoBean.getTarefas(Func.getOrCreatePersistentSession(request), project_name);

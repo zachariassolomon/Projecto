@@ -268,134 +268,138 @@
             MODALS: propriedades das sub-tarefas 
         -->
         
-        <c:forEach var ="subTask" items="${task.getValue()}">
-            <div class="modal fade" id="modal${subTask.getTitulo().replaceAll(" ","")}" role="dialog">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header" style="background-color:#286090">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h3 class="modal-title" style="color:white">${subTask.getTitulo()}</h3>
-                        </div>
-                        <div class="modal-body" style="background-color:lightgray">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p><label>Data proposta:</label> 05/07/2017</p>
-                                    <p><label>Descrição:</label>
-                                        A comida deve ser comprada no Continente.</p>
-                                </div>
-                                <div class="col-sm-6">
-                                    <script>
-                                        function fillAndSubmitForm(data){
-                                            document.getElementById('subtask_status').value = data;
-                                            document.getElementById('subtask_status_form').submit();
-                                        }
-                                    </script>
-                                    <div class="dropdown">
-                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Em progresso
-                                        <span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Em progresso</a></li>
-                                            <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Parada</a></li>
-                                            <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Fechada</a></li>
-                                        </ul>
+                    <c:forEach var ="subTask" items="${task.getValue()}">
+                        <div class="modal fade" id="modal${subTask.getTitulo().replaceAll(" ","")}" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color:#286090">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h3 class="modal-title" style="color:white">${subTask.getTitulo()}</h3>
                                     </div>
-                                    
-                                    <form id="subtask_status_form" action="Project">
-                                        <input type="hidden" name="subtask_name" value="${subTask.getTitulo()}">
-                                        <input id="subtask_status" type="hidden" name="subtask_status" value="subTask">
-                                    </form>
+                                    <div class="modal-body" style="background-color:lightgray">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p><label>Data proposta:</label> 05/07/2017</p>
+                                                <p><label>Descrição:</label>
+                                                    A comida deve ser comprada no Continente.</p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <script>
+                                                    function fillAndSubmitForm(data){
+                                                        document.getElementById('subtask_status').value = data;
+                                                        document.getElementById('subtask_status_form').submit();
+                                                    }
+                                                </script>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Em progresso
+                                                    <span class="caret"></span></button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Em progresso</a></li>
+                                                        <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Parada</a></li>
+                                                        <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Fechada</a></li>
+                                                    </ul>
+                                                </div>
+
+                                                <form id="subtask_status_form" action="Project">
+                                                    <input type="hidden" name="subtask_name" value="${subTask.getTitulo()}">
+                                                    <input id="subtask_status" type="hidden" name="subtask_status" value="subTask">
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <hr style="border-bottom:2px solid white">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div>
+                                                    <h4>Adicionar comentário</h4>
+                                                    <form id="new_comment" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                                                        <div class="form-group">
+                                                            <textarea class="form-control" rows="4" cols="76" name="comment_text" required="required" placeholder="Escreva um comentário..."></textarea>
+                                                            <button type="submit" style="margin-top:6px;" class="btn btn-primary">Adicionar</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                                <hr>                        
+
+                                                <h4>Comentários&nbsp;&nbsp;<span class="glyphicon glyphicon-comment"></span></h4>
+                                                <c:forEach var="comment" items="${tasks}">
+                                                    <div style="margin-top:0px; margin-bottom:0px;" >
+                                                        <label>${comment}</label><small> (em 28/06/2017 às 16:45)</small>
+                                                        <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
+                                                            <p>O comentário que alguém fez pode ser bastante extenso, ocupando mais do que uma linha</p>
+                                                        </div>
+                                                    </div>
+                                                </c:forEach>
+
+                                                <div style="margin-top:10px; margin-bottom:0px;" >
+                                                    <label>Gabriel</label><small> (em 28/06/2017 às 16:45)</small>
+                                                    <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
+                                                        <p>Comentário de uma só linha</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6" style="border-left:2px solid gray;">
+                                                <div>
+                                                    <h4>Registar atividade</h4>
+                                                    <form id="new_activity" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                                                        <div class="form-group">
+                                                            <label>Horas:</label> <input type="number" min="0" value="0" name="hours" required="required" style="width:50px;"></input>
+                                                            <label>&nbsp;Minutos: &nbsp;</label><input type="number" value="0" name="minutes" required="required" min="0" max="59" style="width:50px;"></input>
+                                                            <textarea style="margin-top:10px;" class="form-control" rows="2" cols="76" name="activity_text" required="required" placeholder="Introduza a descrição"></textarea>
+
+                                                            <button type="submit" style="margin-top:6px;" class="btn btn-primary">Registar</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                                <hr>
+
+                                                <h4>Atividade&nbsp;&nbsp;<span class="glyphicon glyphicon-calendar"></span></h4>
+                                                <c:forEach var="activity" items="${tasks}">
+                                                    <div style="margin-top:10px; margin-bottom:0px;"  >
+                                                        <label>${activity}</label><small> (em 28/06/2017 às 16:45)</small>
+                                                        <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
+                                                            <label>Carga:</label> 2h00m
+                                                            <p><label>Descrição:</label> Fiz parte do front-end</p>
+                                                        </div>
+                                                    </div>
+                                                </c:forEach>
+
+                                                <div style="margin-top:10px; margin-bottom:0px;"  >
+                                                    <label>João</label><small> (em 28/06/2017 às 16:45)</small>
+                                                    <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
+                                                        <label>Carga:</label> 1h30m
+                                                        <p><label>Descrição:</label> Fiz algo na camada de apresentação</p>
+                                                    </div>
+                                                </div>
+
+                                                <div style="margin-top:10px; margin-bottom:0px;"  >
+                                                    <label>Pedro</label><small> (em 28/06/2017 às 16:45)</small>
+                                                    <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
+                                                        <label>Carga:</label> 2h00m
+                                                        <p><label>Descrição:</label> Fiz parte do front-end</p>
+                                                    </div>
+                                                </div>
+
+                                                <div style="margin-top:10px; margin-bottom:0px;"  >
+                                                    <label>João</label><small> (em 28/06/2017 às 16:45)</small>
+                                                    <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
+                                                        <label>Carga:</label> 1h30m
+                                                        <p><label>Descrição:</label> Fiz algo na camada de apresentação</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <hr style="border-bottom:2px solid white">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div>
-                                        <h4>Adicionar comentário</h4>
-                                        <form id="new_comment" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
-                                            <div class="form-group">
-                                                <textarea class="form-control" rows="4" cols="76" name="comment_text" required="required" placeholder="Escreva um comentário..."></textarea>
-                                                <button type="submit" style="margin-top:6px;" class="btn btn-primary">Adicionar</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <hr>                        
-
-                                    <h4>Comentários&nbsp;&nbsp;<span class="glyphicon glyphicon-comment"></span></h4>
-                                    <div style="margin-top:0px; margin-bottom:0px;" >
-                                        <label>João</label><small> (em 28/06/2017 às 16:45)</small>
-                                        <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                            <p>O comentário que alguém fez pode ser bastante extenso, ocupando mais do que uma linha</p>
-                                        </div>
-                                    </div>
-
-                                    <div style="margin-top:10px; margin-bottom:0px;" >
-                                        <label>Gabriel</label><small> (em 28/06/2017 às 16:45)</small>
-                                        <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                            <p>Comentário de uma só linha</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6" style="border-left:2px solid gray;">
-                                    <div>
-                                        <h4>Registar atividade</h4>
-                                        <form id="new_activity" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
-                                            <div class="form-group">
-                                                <label>Horas:</label> <input type="number" min="0" value="0" name="hours" required="required" style="width:50px;"></input>
-                                                <label>&nbsp;Minutos: &nbsp;</label><input type="number" value="0" name="minutes" required="required" min="0" max="59" style="width:50px;"></input>
-                                                <textarea style="margin-top:10px;" class="form-control" rows="2" cols="76" name="activity_text" required="required" placeholder="Introduza a descrição"></textarea>
-                                                
-                                                <button type="submit" style="margin-top:6px;" class="btn btn-primary">Registar</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <hr>
-
-                                    <h4>Atividade&nbsp;&nbsp;<span class="glyphicon glyphicon-calendar"></span></h4>
-                                    <div style="margin-top:10px; margin-bottom:0px;"  >
-                                        <label>Pedro</label><small> (em 28/06/2017 às 16:45)</small>
-                                        <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                            <label>Carga:</label> 2h00m
-                                            <p><label>Descrição:</label> Fiz parte do front-end</p>
-                                        </div>
-                                    </div>
-
-                                    <div style="margin-top:10px; margin-bottom:0px;"  >
-                                        <label>João</label><small> (em 28/06/2017 às 16:45)</small>
-                                        <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                            <label>Carga:</label> 1h30m
-                                            <p><label>Descrição:</label> Fiz algo na camada de apresentação</p>
-                                        </div>
-                                    </div>
-
-                                    <div style="margin-top:10px; margin-bottom:0px;"  >
-                                        <label>Pedro</label><small> (em 28/06/2017 às 16:45)</small>
-                                        <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                            <label>Carga:</label> 2h00m
-                                            <p><label>Descrição:</label> Fiz parte do front-end</p>
-                                        </div>
-                                    </div>
-
-                                    <div style="margin-top:10px; margin-bottom:0px;"  >
-                                        <label>João</label><small> (em 28/06/2017 às 16:45)</small>
-                                        <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                            <label>Carga:</label> 1h30m
-                                            <p><label>Descrição:</label> Fiz algo na camada de apresentação</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </c:forEach>
+                    </c:forEach>
         
                 </c:forEach>
             </div>

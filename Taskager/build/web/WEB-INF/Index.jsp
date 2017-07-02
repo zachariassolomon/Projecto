@@ -48,7 +48,7 @@ and open the template in the editor.
                         <input type="text" id="login_username" class="form-control" name="username" value="" required="required" placeholder="Nome de utilizador">
                     </div>
                     <div class="form-group">
-                        <input type="password" id="login_password" class="form-control" name="password" value="" required="required" placeholder="Palava-passe">
+                        <input type="password" id="login_password" class="form-control" name="password" value="" required="required" placeholder="Palavra-passe">
                     </div>
                     <button type="submit" class="btn btn-default btn-success">Entrar</button>
                 </form>

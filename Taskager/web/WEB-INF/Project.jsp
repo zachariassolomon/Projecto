@@ -282,8 +282,12 @@
                                 <textarea class="form-control" rows="4" cols="76" name="task_description" form="new_task" required="required" placeholder="Descrição da tarefa"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="project_description">Prioridade (1 a 7): </label>
-                                <input type="number" min="1" max="7" name="task_priority" form="new_task" value="1" placeholder="1-7" style="width:40px;">
+                                <label for="project_description">Prioridade: </label> &nbsp;&nbsp;
+                                <input type="number" min="0" max="7" name="task_priority" form="new_task" value="4" required="required" placeholder="0-7" style="width:40px;">
+                                <div class="form-group"><label for="project_description">
+                                    (Mínimo: 0<span class="glyphicon glyphicon-arrow-down"></span> 
+                                    Máximo: 7<span class="glyphicon glyphicon-arrow-up"></span>) </label>
+                                </div>  
                             </div>      
                             <button type="submit" class="btn btn-default btn-success">Adicionar</button>
                         </form>
@@ -326,8 +330,12 @@
                                 <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask" required="required" placeholder="Descrição da sub-tarefa"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="project_description">Prioridade (1 a 7): </label>
-                                <input type="number" min="1" max="7" name="subtask_priority" form="new_subtask" value="1" placeholder="1-7" style="width:40px;">
+                                <label for="project_description">Prioridade: </label> &nbsp;&nbsp;
+                                <input type="number" min="0" max="7" name="subtask_priority" form="new_subtask" value="4" required="required" placeholder="0-7" style="width:40px;">
+                                <div class="form-group"><label for="project_description">
+                                    (Mínimo: 0<span class="glyphicon glyphicon-arrow-down"></span> 
+                                    Máximo: 7<span class="glyphicon glyphicon-arrow-up"></span>) </label>
+                                </div>    
                             </div>
                             <button type="submit" class="btn btn-default btn-success">Adicionar</button>
                         </form>

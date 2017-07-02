@@ -41,7 +41,7 @@ and open the template in the editor.
                     LOGIN FORM 
                 -->
                 <form id="login_form" class="navbar-form navbar-right" action="Index" method="post">
-                    <label>Não possui uma conta? Introduza os seus dados e registe-se!</label>
+                    <label style="color:white;">Já possui conta? Introduza aqui os seus dados!</label>&nbsp;
                     <div class="form-group">
                         <%
                             String username = request.getParameter("username"); 

@@ -36,7 +36,7 @@ public class HomeServlet extends HttpServlet {
         
         String[][] projects = {
             {"AA/SI", "Tecnologias Java Web, incluindo beans, servlets e páginas JSP com tags JSTL"},
-            {"EngWeb", "Projeto em Rails para a cadeira de Engenharia Web na Universidade do Minhooooooooooooooooooooooooooooooooooooooooooooo"},
+            {"EngWeb", "Projeto em Rails para a cadeira de Engenharia Web na Universidade do Minho"},
             {"GPS", "Relatório sobre o estado da arte Scrum e especificidades da framework em ambientes académicos"},
             {"Primecog", "Dashboard realizado em Angular 2 para a cadeira LEI com o cliente Manuel Alves"},
             {"ZooKeeper", "Aplicação para gestão de jardins zoológicos"},
@@ -56,7 +56,14 @@ public class HomeServlet extends HttpServlet {
             projects[projects.length-1][0] = aux;
             projects[projects.length-1][1] = request.getParameter("project_description");
         }
-            
+        
+        
+        if (request.getParameter("projects_filter_status")!=null)
+            request.setAttribute("projects_filter_status",request.getParameter("projects_filter_status"));
+        else request.setAttribute("projects_filter_status","Todos os projetos");
+        
+        String[] members = {"Gabriel", "João", "Joel", "Nelson"};        
+        request.setAttribute("members",members);    
         
         request.setAttribute("recentProjects", recentProjects);
         request.setAttribute("projects", projects);

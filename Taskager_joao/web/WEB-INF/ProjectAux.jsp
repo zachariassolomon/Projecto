@@ -217,7 +217,7 @@
                 <ul class="nav nav-pills nav-stacked">
                     
                 <li class="active" data-toggle="modal" data-target="#newTaskModal" >
-                    <a ref="#" style="font-size:20px;">Tarefas
+                    <a href="#" style="font-size:20px;">Tarefas
                         <span title="Adicionar tarefa" class="glyphicon glyphicon-plus pull-right" 
                               data-toggle="tooltip" data-placement="bottom" title="Adicionar tarefa" style="font-size:25px;"></span>
                     </a>
@@ -225,7 +225,7 @@
                     
                 <c:forEach var ="task" items="${tasks}">
                     <!--<li><a onclick="func('${task}',1)" href="#${task}"><b>${task}</b></a></li>-->
-                    <li><a onclick="func('${task}',1)" style="font-size:20px;" href="#${task}">${task}</a></li>
+                    <li><a onclick="func('${task}',1);this.style.color='black';" style="font-size:20px;" href="#${task}">${task}</a></li>
                     </c:forEach>
                 </ul>
             </nav>
@@ -245,10 +245,20 @@
    
                 <c:forEach var ="task" items="${tasks}">
                     <div class="panel panel-primary tasklist" id="${task}">
-                        <div class="panel-heading" data-toggle="modal" data-target="#newSubTaskModal${task.replaceAll(" ","")}">
+                        <div class="panel-heading" data-toggle="tooltip" data-placement="top" 
+                             title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    PROPRIEDADES:  botão &#9881; &nbsp;&nbsp;&nbsp;&nbsp;NOVA SUB-TAREFA: botão + "
+                             onclick="$(this).tooltip('hide');">
                             <b>${task}</b>
-                            <span data-toggle="tooltip" data-placement="bottom" title="Adicionar sub-tarefa" class="glyphicon glyphicon-plus-sign pull-right" style="font-size:20px;"
-                                   ></span>
+                            &nbsp;&nbsp;
+                            <a href="#" style="color:white">
+                                <span data-toggle="modal" data-target="#taskPropertiesModal${task.replaceAll(" ","")}"
+                                      title="Propriedades da tarefa" class="glyphicon glyphicon-cog" style="font-size:20px;"
+                                   ></span></a>
+                            <a href="#" style="color:white">
+                                <span data-toggle="modal" data-target="#newSubTaskModal${task.replaceAll(" ","")}" 
+                                      title="Adicionar sub-tarefa" class="glyphicon glyphicon-plus-sign pull-right" style="font-size:20px;"
+                                              ></span></a>
                         </div>
                         <div class="panel-body">
                             <c:forEach var ="subTask" items="${subTasks}">
@@ -337,16 +347,25 @@
         
         
         <!-- 
-            MODAL: Criar nova SUB-tarefa
+            ------------------------------
+            MODALS: Criar nova SUB-tarefa
+            ------------------------------
+            MODALS: Propriedades da tarefa
+            ------------------------------
         -->
         
         <c:forEach var ="task" items="${tasks}">
+            <!-- 
+                ------------------------------
+                MODALS: Criar nova SUB-tarefa
+                ------------------------------
+            -->
             <div class="modal fade" id="newSubTaskModal${task.replaceAll(" ","")}" role="dialog">
                 <div class="modal-dialog">
 
                     <!-- Modal content-->
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header" style="background-color: lightgray;">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Criar sub-tarefa</h4>
                             <h5><label>Tarefa: </label> ${task}</h5>
@@ -366,6 +385,60 @@
                                 <button type="submit" class="btn btn-default btn-success">Adicionar</button>
                             </form>
 
+                        </div>
+                        <!--<div class="modal-footer">
+                            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>-->
+                    </div>
+
+                </div>
+            </div>
+                                
+            <!-- 
+                ------------------------------
+                MODALS: Propriedades da tarefa
+                ------------------------------
+            -->
+            <div class="modal fade" id="taskPropertiesModal${task.replaceAll(" ","")}" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color:lightgray;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" style="text-align: left">Propriedades de <b>${task}</b></h4>
+                            <!--<h5><label>Tarefa: </label> ${task}</h5>-->
+                        </div>
+                        <div class="modal-body">
+                            <div class="row" >
+                                <div class="col-sm-6" style="text-align:right">
+                                    <h5 style="font-size:16px;"><b>Título: </b></h5>
+                                    <h5 style="font-size:16px;"><b>Descrição: </b></h5>
+                                    <h5 style="font-size:16px;"><b>Data de criação: </b></h5>
+                                    <h5 style="font-size:16px;"><b>Última modificação: </b></h5>
+                                </div>
+                                <div class="col-sm-6" style="text-align:left">
+                                    <h5 style="font-size:16px;">${task}</h5>
+                                    <h5 style="font-size:16px;">My awesome description</h5>
+                                    <h5 style="font-size:16px;">27/06/2017</h5>
+                                    <h5 style="font-size:16px;">03/07/2017</h5>
+                                </div>
+                            </div>
+                            
+                            <!--<form id="new_subtask${task.replaceAll(" ","")}" action="Project">
+                                <div class="form-group">
+                                    <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
+                                    <input type="hidden" id="task_name" class="form-control"  name="task_name" value="${task.replaceAll(" ","")}" required="required">
+                                    <label for="project_name">Título:</label>
+                                    <input type="text" id="project_name" class="form-control" form="new_subtask${task.replaceAll(" ","")}" name="subtask_name" value="" required="required" placeholder="Título da sub-tarefa">
+                                </div>
+                                <div class="form-group">
+                                    <label for="project_description">Descrição:</label>
+                                    <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask${task.replaceAll(" ","")}" required="required" placeholder="Descrição da sub-tarefa"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-default btn-success">Adicionar</button>
+                            </form>-->
+                            
                         </div>
                         <!--<div class="modal-footer">
                             <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>

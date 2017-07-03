@@ -61,6 +61,7 @@ public class SubTarefaBean implements SubTarefaBeanLocal {
             Sessao sessao = new Sessao();
             sessao.setComentario(comentario);
             sessao.setTempo_trabalho(tempo_trabalho);
+            sessao.setData_inicio(new Date().getTime());
             sessao.setUser(user);
             subtarefa.sessoes.add(sessao);
             TarefaDAO.save(subtarefa);
@@ -101,6 +102,11 @@ public class SubTarefaBean implements SubTarefaBeanLocal {
             Logger.getLogger(SubTarefaBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    @Override
+    public Tarefa getSubTarefa(PersistentSession session, int subtask_id) {
+        return tarefaBean.getTarefa(session, subtask_id);
     }
     
     

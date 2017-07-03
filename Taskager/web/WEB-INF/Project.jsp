@@ -4,6 +4,7 @@
     Author     : joao
 --%>
 
+<%@page import="java.util.Date"%>
 <%@page import="java.util.Map"%>
 <%@page import="siaadao.User"%>
 <%@page import="siaadao.Tarefa"%>
@@ -156,12 +157,13 @@
                         <%
                            String project_status = (String) request.getAttribute("project_status");
                            
-                           if (project_status==null || project_status.equals("Em progresso")) out.println(
-                                   "<button class=\"btn btn-primary dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Em progresso");
-                           else if (project_status.equals("Fechado")) out.println(
-                                   "<button class=\"btn dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Fechado");
-                           if (project_status.equals("Parado")) out.println(
-                                   "<button class=\"btn btn-danger dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Parado");
+                           if (project_status==null || project_status.equals("Em progresso")) {
+                               out.println("<button class=\"btn btn-primary dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Em progresso");
+                           } else if (project_status.equals("Fechado")) {
+                               out.println("<button class=\"btn dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Fechado");
+                           } else if (project_status.equals("Parado")) {
+                               out.println("<button class=\"btn btn-danger dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Parado");
+                           }
                         %>
                         <!--<button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">Parado-->
                         <!--<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Fechado-->
@@ -233,14 +235,7 @@
                     </c:forEach>
                 </ul>
             </nav>
-            <!--
-            <p><a href="#haha1">HAHAHA 1</a></p>
-            <p><a href="#haha2">HAHAHA 2</a></p>
-            <p><a href="#haha3">HAHAHA 3</a></p>
-            <p><a href="#haha4">HAHAHA 4</a></p>
-            <br>
-            <p><a href="#second">SECOND (2nd)</a></p>
-            <p><a href="#first">FIRST (1st)</a></p>-->
+
             <br>
         </div>
 
@@ -267,7 +262,6 @@
                             <!-- 
             MODALS: propriedades das sub-tarefas 
         -->
-        
                     <c:forEach var ="subTask" items="${task.getValue()}">
                         <div class="modal fade" id="modal${subTask.getTitulo().replaceAll(" ","")}" role="dialog">
                             <div class="modal-dialog modal-lg">
@@ -279,9 +273,8 @@
                                     <div class="modal-body" style="background-color:lightgray">
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <p><label>Data proposta:</label> 05/07/2017</p>
-                                                <p><label>Descrição:</label>
-                                                    A comida deve ser comprada no Continente.</p>
+                                                <p><label>Data Inicio:</label>${subTask.getData_inicio()} </p>
+                                                <p><label>Descrição:</label>${subTask.getDescricao()}</p>
                                             </div>
                                             <div class="col-sm-6">
                                                 <script>
@@ -291,7 +284,18 @@
                                                     }
                                                 </script>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Em progresso
+                                                    <%
+                                                        String subtask_status = (String) request.getAttribute("subtask_status");
+
+                                                        if (subtask_status==null || subtask_status.equals("Em progresso")) {
+                                                            out.println("<button class=\"btn btn-primary dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Em progresso");
+                                                        } else if (subtask_status.equals("Fechada")) {
+                                                            out.println("<button class=\"btn dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Fechada"); 
+                                                        } else if (subtask_status.equals("Parada")) { 
+                                                            out.println("<button class=\"btn btn-danger dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Parada");
+                                                        }
+                                                     %>
+
                                                     <span class="caret"></span></button>
                                                     <ul class="dropdown-menu">
                                                         <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Em progresso</a></li>
@@ -300,8 +304,9 @@
                                                     </ul>
                                                 </div>
 
-                                                <form id="subtask_status_form" action="Project">
-                                                    <input type="hidden" name="subtask_name" value="${subTask.getTitulo()}">
+                                                <form id="subtask_status_form" action="Subtarefa">
+                                                    <input type="hidden" name="subtask_id" value="${subTask.getID()}">
+                                                    <input type="hidden" name="project_name" value="<%=request.getParameter("project_name")%>">
                                                     <input id="subtask_status" type="hidden" name="subtask_status" value="subTask">
                                                 </form>
                                             </div>
@@ -312,9 +317,11 @@
                                             <div class="col-sm-6">
                                                 <div>
                                                     <h4>Adicionar comentário</h4>
-                                                    <form id="new_comment" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                                                    <form id="new_comment" action="Subtarefa"> <!--onsubmit="alert(this.firstChild.value)"-->
                                                         <div class="form-group">
-                                                            <textarea class="form-control" rows="4" cols="76" name="comment_text" required="required" placeholder="Escreva um comentário..."></textarea>
+                                                            <textarea class="form-control" rows="4" cols="76" name="comment" required="required" placeholder="Escreva um comentário..."></textarea>
+                                                            <input type="hidden" name="subtask_id" value="${subTask.getID()}">
+                                                            <input type="hidden" name="project_name" value="<%= request.getParameter("project_name") %>">
                                                             <button type="submit" style="margin-top:6px;" class="btn btn-primary">Adicionar</button>
                                                         </div>
                                                     </form>
@@ -323,32 +330,27 @@
                                                 <hr>                        
 
                                                 <h4>Comentários&nbsp;&nbsp;<span class="glyphicon glyphicon-comment"></span></h4>
-                                                <c:forEach var="comment" items="${tasks}">
+                                                <c:forEach var="comment" items="${subTask.getInteracoes()}">
                                                     <div style="margin-top:0px; margin-bottom:0px;" >
-                                                        <label>${comment}</label><small> (em 28/06/2017 às 16:45)</small>
+                                                        <label>${comment.getUser().getUsername()}</label><small> ${comment.getData_interacao()}</small>
                                                         <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                                            <p>O comentário que alguém fez pode ser bastante extenso, ocupando mais do que uma linha</p>
+                                                            <p>${comment.getComment()}</p>
                                                         </div>
                                                     </div>
                                                 </c:forEach>
-
-                                                <div style="margin-top:10px; margin-bottom:0px;" >
-                                                    <label>Gabriel</label><small> (em 28/06/2017 às 16:45)</small>
-                                                    <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                                        <p>Comentário de uma só linha</p>
-                                                    </div>
-                                                </div>
                                             </div>
-
+                                            
                                             <div class="col-sm-6" style="border-left:2px solid gray;">
                                                 <div>
                                                     <h4>Registar atividade</h4>
-                                                    <form id="new_activity" action="Project"> <!--onsubmit="alert(this.firstChild.value)"-->
+                                                    <form id="new_activity" action="Subtarefa"> <!--onsubmit="alert(this.firstChild.value)"-->
                                                         <div class="form-group">
                                                             <label>Horas:</label> <input type="number" min="0" value="0" name="hours" required="required" style="width:50px;"></input>
                                                             <label>&nbsp;Minutos: &nbsp;</label><input type="number" value="0" name="minutes" required="required" min="0" max="59" style="width:50px;"></input>
                                                             <textarea style="margin-top:10px;" class="form-control" rows="2" cols="76" name="activity_text" required="required" placeholder="Introduza a descrição"></textarea>
 
+                                                            <input type="hidden" name="subtask_id" value="${subTask.getID()}">
+                                                            <input type="hidden" name="project_name" value="<%= request.getParameter("project_name") %>">
                                                             <button type="submit" style="margin-top:6px;" class="btn btn-primary">Registar</button>
                                                         </div>
                                                     </form>
@@ -357,16 +359,16 @@
                                                 <hr>
 
                                                 <h4>Atividade&nbsp;&nbsp;<span class="glyphicon glyphicon-calendar"></span></h4>
-                                                <c:forEach var="activity" items="${tasks}">
+                                                <c:forEach var="activity" items="${subTask.getSessoes()}">
                                                     <div style="margin-top:10px; margin-bottom:0px;"  >
-                                                        <label>${activity}</label><small> (em 28/06/2017 às 16:45)</small>
+                                                        <label>${activity.getUser().getUsername()}</label><small>${activity.getData_inicio()}</small>
                                                         <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                                            <label>Carga:</label> 2h00m
-                                                            <p><label>Descrição:</label> Fiz parte do front-end</p>
+                                                            <label>Carga:</label> ${activity.getTempo_trabalho()}
+                                                            <p><label>Descrição:</label>${activity.getComentario()}</p>
                                                         </div>
                                                     </div>
                                                 </c:forEach>
-
+                                                <!--
                                                 <div style="margin-top:10px; margin-bottom:0px;"  >
                                                     <label>João</label><small> (em 28/06/2017 às 16:45)</small>
                                                     <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
@@ -374,24 +376,9 @@
                                                         <p><label>Descrição:</label> Fiz algo na camada de apresentação</p>
                                                     </div>
                                                 </div>
-
-                                                <div style="margin-top:10px; margin-bottom:0px;"  >
-                                                    <label>Pedro</label><small> (em 28/06/2017 às 16:45)</small>
-                                                    <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                                        <label>Carga:</label> 2h00m
-                                                        <p><label>Descrição:</label> Fiz parte do front-end</p>
-                                                    </div>
-                                                </div>
-
-                                                <div style="margin-top:10px; margin-bottom:0px;"  >
-                                                    <label>João</label><small> (em 28/06/2017 às 16:45)</small>
-                                                    <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                                        <label>Carga:</label> 1h30m
-                                                        <p><label>Descrição:</label> Fiz algo na camada de apresentação</p>
-                                                    </div>
-                                                </div>
+                                                -->
                                             </div>
-                                        </div>
+                                    </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>

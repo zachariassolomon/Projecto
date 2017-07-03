@@ -13,6 +13,9 @@
  */
 package siaadao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Tarefa {
 	public Tarefa() {
 	}
@@ -204,6 +207,10 @@ public class Tarefa {
 	
 	public final siaadao.InteracaoSetCollection interacoes = new siaadao.InteracaoSetCollection(this, _ormAdapter, siaadao.ORMConstants.KEY_TAREFA_INTERACOES, siaadao.ORMConstants.KEY_INTERACAO_TAREFA, siaadao.ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
+        public ArrayList<Interacao> getInteracoes() {
+            return new ArrayList<>(Arrays.asList(interacoes.toArray()));
+        }
+        
 	private void setORM_Sessoes(java.util.Set value) {
 		this.ORM_sessoes = value;
 	}
@@ -214,6 +221,10 @@ public class Tarefa {
 	
 	public final siaadao.SessaoSetCollection sessoes = new siaadao.SessaoSetCollection(this, _ormAdapter, siaadao.ORMConstants.KEY_TAREFA_SESSOES, siaadao.ORMConstants.KEY_SESSAO_TAREFA, siaadao.ORMConstants.KEY_MUL_ONE_TO_MANY);
 	
+        public ArrayList<Sessao> getSessoes() {
+            return new ArrayList<>(Arrays.asList(sessoes.toArray()));
+        }
+                
 	private void setORM_Subtarefas(java.util.Set value) {
 		this.ORM_subtarefas = value;
 	}

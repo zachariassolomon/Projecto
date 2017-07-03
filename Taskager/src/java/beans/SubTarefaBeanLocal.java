@@ -10,6 +10,7 @@ import javax.ejb.Local;
 import org.orm.PersistentSession;
 import siaadao.Interacao;
 import siaadao.Sessao;
+import siaadao.Tarefa;
 
 /**
  *
@@ -27,5 +28,7 @@ public interface SubTarefaBeanLocal {
     ArrayList<Sessao> getAtividades(PersistentSession session, int task_id);
 
     Boolean changeStatus(PersistentSession session, int task_id, String novo_estado);
+
+    Tarefa getSubTarefa(PersistentSession session, int subtask_id);
     
 }

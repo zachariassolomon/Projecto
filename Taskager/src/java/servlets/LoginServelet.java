@@ -63,7 +63,7 @@ public class LoginServelet extends HttpServlet {
         if((user_id!=null)) {
             logger.log(Level.INFO, "Utilizador já está logado com user_id: " + user_id);
             doLogin(request, response);
-
+            return;
         }
         
         String username = request.getParameter("username");

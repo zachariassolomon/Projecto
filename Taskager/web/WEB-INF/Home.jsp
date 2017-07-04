@@ -107,12 +107,12 @@
                             <ul class="dropdown-menu" style="background-color:lightgray;">
                                 <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Todos os projetos</a></li>
                                 <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Em progresso</a></li>
-                                <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Parados</a></li>
-                                <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Fechados</a></li>
+                                <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Parado</a></li>
+                                <li><a href="#" onclick="fillAndSubmitForm(this.innerHTML)">Fechado</a></li>
                             </ul>
                         </div>
 
-                        <form id="projects_filter_form" action="Home">
+                        <form id="projects_filter_form" action="Login" method="post">
                             <input id="projects_filter_status" type="hidden" name="projects_filter_status">
                         </form>
                     </div>

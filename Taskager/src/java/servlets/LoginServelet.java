@@ -102,18 +102,29 @@ public class LoginServelet extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         String username = (String) request.getSession().getAttribute("user_id");
+        String filter = (String) request.getParameter("projects_filter_status");
+        String filter_constant = null;
+        if(filter != null) {
+            filter_constant=filter;
+        } else {
+            filter_constant=Constants.PROJETO_PROGRESS;
+        }
+        
         ArrayList<Projeto> projects_all = userBean.getProjetos(username, Func.getOrCreatePersistentSession(request));
         ArrayList<Projeto> projects_not_closed = new ArrayList<Projeto>();
         
         // TODO: fix this - creating for all projects(should be for open ones (maybe change query)
         ArrayList<Projeto> recents = new ArrayList<>();
         
+        
+        
         for(Projeto p : projects_all) {
             if(!p.getEstado().equals(Constants.PROJETO_CLOSED)) {
-                projects_not_closed.add(p);
                 recents.add(p);
             }
-            
+            if(p.getEstado().equals(filter_constant) || filter_constant.equals(Constants.ALL_PROJECTS)) {
+                projects_not_closed.add(p);
+            }
         }
 
         Collections.sort(recents, (Projeto o1, Projeto o2) -> ((Long)o1.getLast_updated()).compareTo((Long)o2.getLast_updated()));
@@ -123,6 +134,9 @@ public class LoginServelet extends HttpServlet {
          request.setAttribute("recentProjects", recents.subList(0, size));
          request.setAttribute("projects", projects_not_closed);
          request.setAttribute("username", username);
+         
+         
+         request.setAttribute("projects_filter_status", filter_constant);
                  
          request.getRequestDispatcher("WEB-INF/Home.jsp").forward(request, response);
         

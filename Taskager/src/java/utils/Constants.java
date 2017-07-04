@@ -22,10 +22,13 @@ public class Constants {
     public static final String PROJETO_PROGRESS = "Em progresso";
     public static final String PROJETO_STALLED = "Parado";
     public static final String PROJETO_CLOSED = "Fechado";
+    public static final String ALL_PROJECTS = "Todos os projetos";
     
     public static final String TAREFA_PROGRESS = "Em progresso";
     public static final String TAREFA_STALLED = "Parada";
     public static final String TAREFA_CLOSED = "Fechada";
+    
+    
     
 
 }

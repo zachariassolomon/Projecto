@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.hibernate.FlushMode;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
 import siaadao.ProjectoPersistentManager;
@@ -30,12 +31,12 @@ public class Func {
         try {
             Object dbsession = request.getSession().getAttribute("dbsession");
             if(dbsession!=null) {
-                logger.log(Level.INFO,"Reutilizar sessão persistente");
                 session = (PersistentSession) dbsession;
+                logger.log(Level.INFO,"Reutilizar sessao persistente: " + session.hashCode());
             } else {
-                logger.log(Level.INFO, "A criar uma nova sessão persistente");
                 session = ProjectoPersistentManager.instance().getSession();
                 //request.getSession().setAttribute("dbsession", session);
+                logger.log(Level.INFO, "Criada uma nova sessao persistente: " + session.hashCode());
             }
         } catch (PersistentException ex) {
             logger.log(Level.SEVERE, "Ocorreu uma exceção ao criar sessão persistente", ex);

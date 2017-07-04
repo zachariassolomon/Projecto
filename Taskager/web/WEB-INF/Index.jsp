@@ -37,7 +37,7 @@ and open the template in the editor.
                     </a>
                 </div>
                 <form class="navbar-form navbar-right" action="Login" method="post">
-                <form class="navbar-form navbar-right" action="Index">
+                <!--<form class="navbar-form navbar-right" action="Index">-->
                     <div class="form-group">
                         <label style="color:white;">Já possui conta? Introduza aqui os seus dados!</label>&nbsp;
                         <% 
@@ -79,6 +79,12 @@ and open the template in the editor.
                                 <div class="col-sm-12">                                    
                                     <label for="username">Nome de utilizador:</label>
                                     <input type="text" id="username"  class="form-control" value="" name="username" required="required" placeholder="Nome de utilizador" />
+                                    <% 
+                                        String register_ok = (String) request.getAttribute("register_ok");
+
+                                        if (register_ok!=null && register_ok.equals("no"))
+                                            out.println("<span style=\"color:red\">Utilizador já existe!&nbsp</span>&nbsp;");
+                                    %>
                                 </div>
                             </div>
                             <div class="form-group">

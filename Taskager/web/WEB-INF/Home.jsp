@@ -296,25 +296,7 @@
                                                 </div>
                                         </div>
                                     </div>
-
-                                    <!--<form id="new_subtask${task.replaceAll(" ","")}" action="Project">
-                                        <div class="form-group">
-                                            <input type="hidden" id="project_name" class="form-control"  name="project_name" value="<%= request.getParameter("project_name") %>" required="required">
-                                            <input type="hidden" id="task_name" class="form-control"  name="task_name" value="${task.replaceAll(" ","")}" required="required">
-                                            <label for="project_name">Título:</label>
-                                            <input type="text" id="project_name" class="form-control" form="new_subtask${task.replaceAll(" ","")}" name="subtask_name" value="" required="required" placeholder="Título da sub-tarefa">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="project_description">Descrição:</label>
-                                            <textarea class="form-control" rows="4" cols="76" name="subtask_description" form="new_subtask${task.replaceAll(" ","")}" required="required" placeholder="Descrição da sub-tarefa"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-default btn-success">Adicionar</button>
-                                    </form>-->
-
                                 </div>
-                                <!--<div class="modal-footer">
-                                    <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Cancelar</button>
-                                </div>-->
                             </div>
 
                         </div>

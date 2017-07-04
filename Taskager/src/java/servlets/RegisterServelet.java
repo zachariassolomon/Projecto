@@ -82,10 +82,9 @@ public class RegisterServelet extends HttpServlet {
             
             request.getRequestDispatcher("Login").forward(request, response);
         } else {
-            try (PrintWriter out = response.getWriter()) {
-                out.println("Registo falhou, utilizador já existe");
-                logger.log(Level.INFO, "Registo falhou");
-            }
+            request.setAttribute("register_ok","no");
+            request.getRequestDispatcher("WEB-INF/Index.jsp").forward(request, response);
+            logger.log(Level.INFO, "Registo falhou");
         }
         
         statsd.recordExecutionTimeToNow(METHOD, starttime);

@@ -13,6 +13,8 @@
  */
 package siaadao;
 
+import utils.Func;
+
 public class Sessao {
 	public Sessao() {
 	}
@@ -67,6 +69,10 @@ public class Sessao {
 	public long getData_inicio() {
 		return data_inicio;
 	}
+        
+        public String getData_inicioString() {
+		return Func.long2String(data_inicio);
+	}
 	
 	public void setData_fim(long value) {
 		this.data_fim = value;
@@ -92,6 +98,10 @@ public class Sessao {
 		return tempo_trabalho;
 	}
 	
+        public String getTempo_trabalhoString() {
+		return Func.minutes2hours(tempo_trabalho);
+	}
+                
 	public void setTarefa(siaadao.Tarefa value) {
 		if (tarefa != null) {
 			tarefa.sessoes.remove(this);

@@ -9,6 +9,7 @@ import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -45,10 +46,15 @@ public class IndexServelet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {   
+        statsd.incrementCounter(METHOD);
+        Long starttime = new Date().getTime();
+        
         // LOGOUT
         String logout = request.getParameter("logout");
+        
         if(logout != null && logout.equals("true")) {
             request.getSession().removeAttribute("user_id");
+            logger.log(Level.INFO, "Utilizador fez logout");
         }
         
         //ALREADY LOGGED IN
@@ -59,9 +65,11 @@ public class IndexServelet extends HttpServlet {
             return;
         }
         
-        //NEW SESSION
+        logger.log(Level.INFO, "A exibir pagina de index");
         request.getRequestDispatcher("WEB-INF/Index.jsp").forward(request, response);
         
+        statsd.recordExecutionTimeToNow(METHOD, starttime);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

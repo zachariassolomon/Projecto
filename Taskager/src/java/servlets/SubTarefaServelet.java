@@ -6,9 +6,12 @@
 package servlets;
 
 import beans.SubTarefaBeanLocal;
+import com.timgroup.statsd.NonBlockingStatsDClient;
+import com.timgroup.statsd.StatsDClient;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import siaadao.Tarefa;
+import utils.Constants;
 import utils.Func;
 
 /**
@@ -25,9 +29,15 @@ import utils.Func;
 @WebServlet(name = "Subtarefa", urlPatterns = {"/Subtarefa"})
 public class SubTarefaServelet extends HttpServlet {
 
+    
     @EJB
     private SubTarefaBeanLocal subTarefaBean;
 
+    /////////// SETUP METERING AND LOGGING //////////
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final StatsDClient statsd = new NonBlockingStatsDClient(Constants.STATSD_PREFIX, Constants.STATSD_HOST, Constants.STATSD_PORT);
+    private final String METHOD = "Subtarefa";
+    //////////////////////////////////////////////////
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,8 +49,11 @@ public class SubTarefaServelet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
+        statsd.incrementCounter(METHOD);
+        Long starttime = new Date().getTime();
+        
+        response.setContentType("text/html;charset=UTF-8");
         String username = (String) request.getSession().getAttribute("user_id");
         String project_name = (String) request.getParameter("project_name");
         int subtask_id = Integer.valueOf(request.getParameter("subtask_id"));
@@ -69,13 +82,13 @@ public class SubTarefaServelet extends HttpServlet {
         if(subtask_status != null) {
             subTarefaBean.changeStatus(Func.getOrCreatePersistentSession(request), subtask_id, subtask_status);
             request.setAttribute("subtask_status", subtask_status);
-
-            // TODO : do something with result
         }
-        
         
         request.setAttribute("project_name", project_name);
         request.getRequestDispatcher("Tarefa").forward(request, response);
+        
+        statsd.recordExecutionTimeToNow(METHOD, starttime);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

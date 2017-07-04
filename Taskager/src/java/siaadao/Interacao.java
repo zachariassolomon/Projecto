@@ -13,6 +13,8 @@
  */
 package siaadao;
 
+import utils.Func;
+
 public class Interacao {
 	public Interacao() {
 	}
@@ -70,6 +72,10 @@ public class Interacao {
 	
 	public long getData_interacao() {
 		return data_interacao;
+	}
+        
+        public String getData_interacaoString() {
+		return Func.long2String(data_interacao);
 	}
 	
 	public void setTarefa(siaadao.Tarefa value) {

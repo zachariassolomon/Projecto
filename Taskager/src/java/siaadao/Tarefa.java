@@ -15,6 +15,7 @@ package siaadao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import utils.Func;
 
 public class Tarefa {
 	public Tarefa() {
@@ -124,11 +125,19 @@ public class Tarefa {
 	public long getData_inicio() {
 		return data_inicio;
 	}
+        
+        public String getData_inicioString() {
+		return Func.long2String(data_inicio);
+	}
 	
 	public void setData_fim(long value) {
 		this.data_fim = value;
 	}
 	
+	public String setData_fimString(long value) {
+		return Func.long2String(data_fim);
+	}
+        
 	public long getData_fim() {
 		return data_fim;
 	}

@@ -15,9 +15,9 @@ import com.timgroup.statsd.StatsDClient;
  */
 public class Constants {
     
-    public static final int STATSD_PORT = 8126;
+    public static final int STATSD_PORT = 8125;
     public static final String STATSD_HOST = "localhost";
-    public static final String STATSD_PREFIX = "siaa";
+    public static final String STATSD_PREFIX = "taskager";
     
     public static final String PROJETO_PROGRESS = "Em progresso";
     public static final String PROJETO_STALLED = "Parado";

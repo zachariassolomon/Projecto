@@ -4,6 +4,10 @@
     Author     : joao
 --%>
 
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="siaadao.User"%>
+<%@page import="siaadao.User"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -175,7 +179,7 @@
                                      
                     <!-- 
                         ------------------------------
-                        MODALS: Propriedades do projeto
+                        MODALS: Propriedades de projeto
                         ------------------------------
                     -->
 
@@ -223,7 +227,7 @@
                                             <h5 style="font-size:16px;"><b>Data de criação: </b></h5>
                                         </div>
                                         <div class="col-sm-6" style="text-align:left">
-                                            <h5 style="font-size:16px;">27/06/2017</h5>
+                                            <h5 style="font-size:16px;">${project.getData_criacaoString()}</h5>
                                         </div>
                                     </div>
 
@@ -232,7 +236,16 @@
                                             <h5 style="font-size:16px;"><b>Última modificação: </b></h5>
                                         </div>
                                         <div class="col-sm-6" style="text-align:left">
-                                            <h5 style="font-size:16px;">03/07/2017</h5>
+                                            <h5 style="font-size:16px;">${project.getLast_updatedString()}</h5>
+                                        </div>
+                                    </div>
+                                        
+                                    <div class="row" >
+                                        <div class="col-sm-6" style="text-align:right">
+                                            <h5 style="font-size:16px;"><b>Data de fecho: </b></h5>
+                                        </div>
+                                        <div class="col-sm-6" style="text-align:left">
+                                            <h5 style="font-size:16px;">${project.getData_fimString()}</h5>
                                         </div>
                                     </div>
 
@@ -242,8 +255,8 @@
                                         </div>
                                         <div class="col-sm-6" style="text-align:left">
                                             <span style="font-size:16px;">
-                                            <c:forEach var="member" items="${members}">
-                                                <span class="label label-primary">${member}</span>
+                                            <c:forEach var="member" items="${project.getMembers()}">
+                                                <span class="label label-primary">${member.getUsername()}</span>
                                             </c:forEach>
                                         </div>
                                     </div>
@@ -253,7 +266,7 @@
                                             <h5 style="font-size:16px;"><b>Tempo total de trabalho: </b></h5>
                                         </div>
                                         <div class="col-sm-6" style="text-align:left">
-                                            <h5 style="font-size:16px;">04h20m</h5>
+                                            <h5 style="font-size:16px;">${project.getTempoTrabalhoString()}</h5>
                                         </div>
                                     </div>
 
@@ -272,10 +285,10 @@
                                                   </thead>
                                                   <tbody>
 
-                                                    <c:forEach var="member" items="${members}">
+                                                    <c:forEach var="pair" items="${project.getTempos().entrySet()}">
                                                         <tr>
-                                                          <td>${member}</td>
-                                                          <td>04h20m</td>
+                                                          <td>${pair.getKey()}</td>
+                                                          <td>${pair.getValue()}</td>
                                                         </tr>
                                                     </c:forEach>
                                                   </tbody>

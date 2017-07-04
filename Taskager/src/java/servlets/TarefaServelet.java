@@ -8,10 +8,14 @@ package servlets;
 import beans.ProjetoBeanLocal;
 import beans.TarefaBeanLocal;
 import beans.UserBeanLocal;
+import com.timgroup.statsd.NonBlockingStatsDClient;
+import com.timgroup.statsd.StatsDClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import siaadao.Projeto;
 import siaadao.User;
+import utils.Constants;
 import utils.Func;
 
 /**
@@ -38,6 +43,12 @@ public class TarefaServelet extends HttpServlet {
     @EJB
     private ProjetoBeanLocal projetoBean;
 
+    //////////// SETUP METERING AND LOGGING //////////
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final StatsDClient statsd = new NonBlockingStatsDClient(Constants.STATSD_PREFIX, Constants.STATSD_HOST, Constants.STATSD_PORT);
+    private final String METHOD = "Tarefa";
+    //////////////////////////////////////////////////
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -49,8 +60,11 @@ public class TarefaServelet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         
+        statsd.incrementCounter(METHOD);
+        Long starttime = new Date().getTime();
+        
+        response.setContentType("text/html;charset=UTF-8");
         String username = (String) request.getSession().getAttribute("user_id");
         String project_name = (String) request.getParameter("project_name");
         Projeto proj = projetoBean.getProjeto(Func.getOrCreatePersistentSession(request), project_name);
@@ -103,8 +117,10 @@ public class TarefaServelet extends HttpServlet {
         request.setAttribute("tasks", tasks);
         request.setAttribute("members", members);
         request.setAttribute("username", username);       
+        request.setAttribute("project_description", proj.getDescricao());
         request.getRequestDispatcher("WEB-INF/Project.jsp").forward(request, response);
-
+        
+        statsd.recordExecutionTimeToNow(METHOD, starttime);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

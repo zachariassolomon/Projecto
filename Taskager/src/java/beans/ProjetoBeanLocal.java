@@ -7,10 +7,12 @@ package beans;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.ejb.Local;
 import org.orm.PersistentSession;
 import siaadao.Projeto;
 import siaadao.Tarefa;
+import siaadao.User;
 
 /**
  *
@@ -28,6 +30,5 @@ public interface ProjetoBeanLocal {
     ArrayList<siaadao.User> getMembers(PersistentSession session, String project_name);
 
     Boolean changeStatus(PersistentSession session, String project_name, String project_status);
-
     
 }

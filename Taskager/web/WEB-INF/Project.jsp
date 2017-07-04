@@ -142,7 +142,7 @@
                     <h2 style="text-align:left">                
                         <span class="glyphicon glyphicon-folder-open" ></span>&nbsp;
                         <b><%=request.getParameter("project_name")%></b>
-                        <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getParameter("project_description")%></span>
+                        <span style="text-align:left; font-size:16px;">&nbsp;&nbsp;<%= request.getAttribute("project_description")%></span>
                     </h2>
                 </div>
                 <div class="col-sm-1">
@@ -273,8 +273,8 @@
                                     <div class="modal-body" style="background-color:lightgray">
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <p><label>Data Inicio:</label>${subTask.getData_inicio()} </p>
-                                                <p><label>Descrição:</label>${subTask.getDescricao()}</p>
+                                                <p><label>Data Inicio: </label> ${subTask.getData_inicioString()} </p>
+                                                <p><label>Descrição: </label> ${subTask.getDescricao()}</p>
                                             </div>
                                             <div class="col-sm-6">
                                                 <script>
@@ -332,7 +332,7 @@
                                                 <h4>Comentários&nbsp;&nbsp;<span class="glyphicon glyphicon-comment"></span></h4>
                                                 <c:forEach var="comment" items="${subTask.getInteracoes()}">
                                                     <div style="margin-top:0px; margin-bottom:0px;" >
-                                                        <label>${comment.getUser().getUsername()}</label><small> ${comment.getData_interacao()}</small>
+                                                        <label>${comment.getUser().getUsername()}</label><small> em ${comment.getData_interacaoString()}</small>
                                                         <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
                                                             <p>${comment.getComment()}</p>
                                                         </div>
@@ -361,9 +361,9 @@
                                                 <h4>Atividade&nbsp;&nbsp;<span class="glyphicon glyphicon-calendar"></span></h4>
                                                 <c:forEach var="activity" items="${subTask.getSessoes()}">
                                                     <div style="margin-top:10px; margin-bottom:0px;"  >
-                                                        <label>${activity.getUser().getUsername()}</label><small>${activity.getData_inicio()}</small>
+                                                        <label>${activity.getUser().getUsername()}</label><small> em ${activity.getData_inicioString()}</small>
                                                         <div style="background-color:#286090;color:white;width:96%; margin-left:2%;margin-top:0px; margin-bottom:0px;padding-top:10px;padding-bottom:0px;" class="well">
-                                                            <label>Carga:</label> ${activity.getTempo_trabalho()}
+                                                            <label>Carga:</label> ${activity.getTempo_trabalhoString()}
                                                             <p><label>Descrição:</label>${activity.getComentario()}</p>
                                                         </div>
                                                     </div>
@@ -443,9 +443,9 @@
                                 <textarea class="form-control" rows="4" cols="76" name="task_description" form="new_task" required="required" placeholder="Descrição da tarefa"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="project_description">Prioridade: </label> &nbsp;&nbsp;
+                                <label for="project_prioridade">Prioridade: </label> &nbsp;&nbsp;
                                 <input type="number" min="0" max="7" name="task_priority" form="new_task" value="4" required="required" placeholder="0-7" style="width:40px;">
-                                <div class="form-group"><label for="project_description">
+                                <div class="form-group"><label for="project_prioridade">
                                     (Mínimo: 0<span class="glyphicon glyphicon-arrow-down"></span> 
                                     Máximo: 7<span class="glyphicon glyphicon-arrow-up"></span>) </label>
                                 </div>  

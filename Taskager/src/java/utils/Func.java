@@ -7,12 +7,13 @@ package utils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.hibernate.FlushMode;
 import org.orm.PersistentException;
 import org.orm.PersistentSession;
 import siaadao.ProjectoPersistentManager;
@@ -50,5 +51,22 @@ public class Func {
         } catch (IOException ex) {   
             logger.log(Level.SEVERE, text, ex);
         }   
+    }
+    
+    public static String long2String(long time) {
+        if(time==0) {
+            return "-";
+        }
+        Date data = new Date(time);
+        
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        return df.format(data);
+    }
+    
+    public static String minutes2hours(long time) {
+        long hours = time / 60; //since both are ints, you get an int
+        long minutes = time % 60;
+        return String.format("%dh%02dm", hours, minutes);
     }
 }

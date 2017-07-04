@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import beans.ProjetoBeanLocal;
 import beans.UserBeanLocal;
 import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import siaadao.Projeto;
+import siaadao.User;
 import utils.Constants;
 import utils.Func;
 
@@ -34,6 +37,9 @@ import utils.Func;
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class LoginServelet extends HttpServlet {
+
+    @EJB
+    private ProjetoBeanLocal projetoBean;
 
     @EJB
     private UserBeanLocal userBean;
@@ -111,7 +117,7 @@ public class LoginServelet extends HttpServlet {
         }
         
         ArrayList<Projeto> projects_all = userBean.getProjetos(username, Func.getOrCreatePersistentSession(request));
-        ArrayList<Projeto> projects_not_closed = new ArrayList<Projeto>();
+        ArrayList<Projeto> projects_not_closed = new ArrayList<>();
         
         // TODO: fix this - creating for all projects(should be for open ones (maybe change query)
         ArrayList<Projeto> recents = new ArrayList<>();
@@ -131,14 +137,17 @@ public class LoginServelet extends HttpServlet {
     
         int size = (recents.size()>3) ? 3 :  recents.size();
         
-         request.setAttribute("recentProjects", recents.subList(0, size));
-         request.setAttribute("projects", projects_not_closed);
-         request.setAttribute("username", username);
-         
-         
-         request.setAttribute("projects_filter_status", filter_constant);
-                 
-         request.getRequestDispatcher("WEB-INF/Home.jsp").forward(request, response);
+        
+        
+        
+        request.setAttribute("recentProjects", recents.subList(0, size));
+        request.setAttribute("projects", projects_not_closed);
+        request.setAttribute("username", username);
+
+
+        request.setAttribute("projects_filter_status", filter_constant);
+
+        request.getRequestDispatcher("WEB-INF/Home.jsp").forward(request, response);
         
     }
     

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -16,6 +17,7 @@ import org.orm.PersistentException;
 import org.orm.PersistentSession;
 import siaadao.Projeto;
 import siaadao.ProjetoDAO;
+import siaadao.Sessao;
 import siaadao.Tarefa;
 import siaadao.User;
 import siaadao.UserDAO;
@@ -90,6 +92,8 @@ public class ProjetoBean implements ProjetoBeanLocal {
         return members;
     }
 
+    
+    
     @Override
     public Boolean changeStatus(PersistentSession session, String project_name, String project_status) {
         try {
@@ -99,7 +103,11 @@ public class ProjetoBean implements ProjetoBeanLocal {
                 return null;
             
             proj.setEstado(project_status);
-            proj.setLast_updated(new Date().getTime());
+            if(project_status.equals(Constants.PROJETO_CLOSED)) {
+                proj.setData_fim(new Date().getTime());
+            } else {
+                proj.setLast_updated(new Date().getTime());
+            }
             
             ProjetoDAO.save(proj);
             return true;
@@ -108,7 +116,5 @@ public class ProjetoBean implements ProjetoBeanLocal {
         }
         return false;
     }
-
-    
 
 }

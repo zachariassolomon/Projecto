@@ -13,6 +13,13 @@
  */
 package siaadao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import utils.Func;
+
 public class Projeto {
 	public Projeto() {
 	}
@@ -88,6 +95,10 @@ public class Projeto {
 	public long getData_criacao() {
 		return data_criacao;
 	}
+        
+        public String getData_criacaoString() {
+		return Func.long2String(data_criacao);
+	}
 	
 	public void setData_fim(long value) {
 		this.data_fim = value;
@@ -97,6 +108,10 @@ public class Projeto {
 		return data_fim;
 	}
 	
+        public String getData_fimString() {
+		return Func.long2String(data_fim);
+	}
+                
 	public void setEstado(String value) {
 		this.estado = value;
 	}
@@ -112,6 +127,10 @@ public class Projeto {
 	public long getLast_updated() {
 		return last_updated;
 	}
+        
+        public String getLast_updatedString() {
+                return Func.long2String(last_updated);
+	}
 	
 	private void setORM_Users(java.util.Set value) {
 		this.ORM_users = value;
@@ -123,6 +142,53 @@ public class Projeto {
 	
 	public final siaadao.UserSetCollection users = new siaadao.UserSetCollection(this, _ormAdapter, siaadao.ORMConstants.KEY_PROJETO_USERS, siaadao.ORMConstants.KEY_USER_PROJETOS, siaadao.ORMConstants.KEY_MUL_MANY_TO_MANY);
 	
+        public ArrayList<User> getUsers() {
+		return new ArrayList<>(Arrays.asList(users.toArray()));
+	}
+        
+        public HashMap<String, String> getTempos() {
+            HashMap<String, Long> tempos = new HashMap<>();
+            HashMap<String, String> temposString = new HashMap<>();
+            for (Tarefa tar : tarefas.toArray()) {
+                for (Tarefa subtar : tar.subtarefas.toArray()) {
+                    for(Sessao s : subtar.getSessoes()) {
+                        String u = s.getUser().getUsername();
+                        if(tempos.containsKey(u)) {
+                            Long novo_tempo = tempos.get(u)+s.getTempo_trabalho();
+                            tempos.replace(u, novo_tempo);
+                        } else {
+                            tempos.put(u, s.getTempo_trabalho());
+                        }
+                    }
+                }
+            }
+            for(Entry<String,Long> tempoEntry : tempos.entrySet()) {
+                temposString.put(tempoEntry.getKey(), Func.minutes2hours(tempoEntry.getValue()));
+            }
+            return temposString;
+        }
+        
+        public ArrayList<User> getMembers() {
+            ArrayList<siaadao.User> members = new ArrayList(Arrays.asList(users.toArray()));
+            return members;
+        }
+        
+        public Long getTempoTrabalho() {
+            long tempo = 0;
+            for (Tarefa tar : tarefas.toArray()) {
+                for (Tarefa subtar : tar.subtarefas.toArray()) {
+                    for(Sessao s : subtar.getSessoes()) {
+                        tempo+=s.getTempo_trabalho();
+                    }
+                }
+            }
+            return tempo;
+        }
+        
+        public String getTempoTrabalhoString() {
+            return Func.minutes2hours(getTempoTrabalho());
+        }
+        
 	private void setORM_Tarefas(java.util.Set value) {
 		this.ORM_tarefas = value;
 	}
@@ -138,6 +204,7 @@ public class Projeto {
 		throw new UnsupportedOperationException();
 	}
 	
+        @Override
 	public String toString() {
 		return String.valueOf(getID());
 	}
